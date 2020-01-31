@@ -15,6 +15,10 @@ public class AudioManager : BaseManager
     /// </summary>
     public const string Sound_EatApple = "吃苹果";
     /// <summary>
+    /// 按钮点击音效
+    /// </summary>
+    public const string Sound_ButtonClick = "ButtonClick";
+    /// <summary>
     /// 对话气泡音效
     /// </summary>
     public const string Sound_Dialogue = "对话气泡";
@@ -117,7 +121,15 @@ public class AudioManager : BaseManager
 
     public void PlayNormalSound(string soundName, AudioSource audioSource, float volume = 1f)
     {
-        PlaySound(audioSource, LoadSound(soundName), volume);
+        if (audioSource == null)
+        {
+            PlaySound(normalAudioSource, LoadSound(soundName), volume);
+        }
+        else
+        {
+            PlaySound(audioSource, LoadSound(soundName), volume);
+        }
+
     }
 
     public void StopBgSound()
