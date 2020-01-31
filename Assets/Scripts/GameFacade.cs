@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameFacade : MonoBehaviour
 {
+    //GameFacade控制所有Manager，游戏物体需要调用Manager中的内容时必须通过GameFacade这个中介
+    //而Manager中需要被其他游戏物体调用的方法就转入Facade中（具体如Audio Region所示）
+
     private static GameFacade _instance;
     public static GameFacade Instance
     {
