@@ -137,7 +137,6 @@ public class AudioManager : BaseManager
         {
             PlaySound(audioSource, LoadSound(soundName), normalVolume);
         }
-
     }
 
     public void StopBgSound()
