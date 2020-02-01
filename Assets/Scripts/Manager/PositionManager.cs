@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.UIElements.GraphView;
 using UnityEngine;
 
 public enum Position
@@ -23,17 +24,23 @@ public class PositionManager : BaseManager
     private Transform leftAirWallTransform;
     private Transform rightAirWallTransform;
 
+    private int index;
+
     private Vector3 leftScale = Vector3.zero;
     private Vector3 rightScale = Vector3.zero;
 
     private Vector3 position0_R = new Vector3(12, 0, 0.4f);
     private Vector3 position1_R = new Vector3(14, 0, 0.4f);
     private Vector3 position1_L = new Vector3(-14, 0, 0.4f);
+    private Vector3 position1_U = new Vector3(0, 0, -1);
+    private Vector3 position2_L = new Vector3(-17, 0, 0.4f);
 
     private Vector3 leftAirWallPosition_0 = new Vector3(-16.2f, 0, 0);
     private Vector3 rightAirrWallPositon_0 = new Vector3(16.2f, 0, 0);
     private Vector3 leftAirWallPosition_1 = new Vector3(-17.8f, 0, 0);
     private Vector3 rightAirrWallPositon_1 = new Vector3(17.8f, 0, 0);
+    private Vector3 leftAirWallPosition_2 = new Vector3(-21, 0, 0);
+    private Vector3 rightAirrWallPositon_2 = new Vector3(21, 0, 0);
 
 
     public override void OnInit()
@@ -48,6 +55,23 @@ public class PositionManager : BaseManager
         }
 
         rightScale = new Vector3(-leftScale.x, leftScale.y, leftScale.z);
+
+        index = facade.GetPresentIndex();
+        if (index == 0)
+        {
+            leftAirWallTransform.localPosition = leftAirWallPosition_0;
+            rightAirWallTransform.localPosition = rightAirrWallPositon_0;
+        }
+        else if (index == 10 && index == 11)
+        {
+            leftAirWallTransform.localPosition = leftAirWallPosition_2;
+            rightAirWallTransform.localPosition = rightAirrWallPositon_2;
+        }
+        else
+        {
+            leftAirWallTransform.localPosition = leftAirWallPosition_1;
+            rightAirWallTransform.localPosition = rightAirrWallPositon_1;
+        }
     }
 
     public void SetPosition(int index, Position enterPosition)
@@ -62,9 +86,16 @@ public class PositionManager : BaseManager
                 break;
             case 1:
             case 2:
+            case 3:
+            case 4:
+            case 5:
+            case 6:
+            case 7:
+            case 8:
                 switch (enterPosition)
                 {
                     case Position.Right:
+                    case Position.Up:
                         playerTransform.localPosition = position1_L;
                         playerTransform.localScale = rightScale;
                         break;
@@ -73,12 +104,19 @@ public class PositionManager : BaseManager
                         playerTransform.localScale = leftScale;
                         break;
                     case Position.Down:
-                        break;
-                    case Position.Up:
+                        playerTransform.localPosition = position1_U;
+                        playerTransform.localScale = leftScale;
                         break;
                 }
                 leftAirWallTransform.localPosition = leftAirWallPosition_1;
                 rightAirWallTransform.localPosition = rightAirrWallPositon_1;
+                break;
+            case 10:
+            case 11:
+                playerTransform.localPosition = position2_L;
+                playerTransform.localScale = rightScale;
+                leftAirWallTransform.localPosition = leftAirWallPosition_2;
+                rightAirWallTransform.localPosition = rightAirrWallPositon_2;
                 break;
         }
     }

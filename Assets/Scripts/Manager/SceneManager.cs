@@ -13,7 +13,7 @@ public class SceneManager : BaseManager
 
     private int index = -1;
     //场景编号的最大值，在每次美工完成新的场景之后要重新编写!!!
-    private int maxIndex = 1;
+    private int maxIndex = 11;
     private Dictionary<int, GameObject> sceneDic = new Dictionary<int, GameObject>();
 
     private GameObject bgGO = null;
@@ -30,6 +30,14 @@ public class SceneManager : BaseManager
             if (LoadScene(str) != null) 
             {
                 sceneDic.Add(i, LoadScene(str));
+            }
+            else
+            {
+                str = "BackgroundFix_" + i;
+                if (LoadScene(str) != null) 
+                {
+                    sceneDic.Add(i, LoadScene(str));
+                }
             }
         }
     }
