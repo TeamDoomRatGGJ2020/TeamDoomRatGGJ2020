@@ -25,8 +25,12 @@ public class CharacterController : MonoBehaviour
     public float JumpForce = 400f;
     // 是否能在空中控制
     public bool CanAriControl = false;
-    // 变成球的加速倍数
+    // 缩成球的加速倍数
     public float BallSpeedRatio = 2f;
+    // 变成方形的加速倍数
+    public float SquareSpeedRatio = 0.75f;
+    public float NormalColliderRadius = 5f;
+    public float SquatingColliderRadius = 2.5f;
     #endregion
 
     #region 滞空相关 没有跳跃那就没用
@@ -56,6 +60,7 @@ public class CharacterController : MonoBehaviour
     private Rigidbody _Rigidbody;
     private UnityEvent _OnLandEvent;
     private Animator _Animator;
+    private SphereCollider _SphereCollider;
 
     public PlayerShape PlayerShape = PlayerShape.Ball;
     // 保证每次检测伸缩脚之前该键已经被抬起来了 避免按住然后连续伸缩
@@ -69,6 +74,7 @@ public class CharacterController : MonoBehaviour
     {
         _Rigidbody = GetComponent<Rigidbody>();
         _Animator = GetComponent<Animator>();
+        _SphereCollider = GetComponent<SphereCollider>();
 
         if (_OnLandEvent is null)
         {
@@ -164,7 +170,21 @@ public class CharacterController : MonoBehaviour
     {
         if (PlayerShape == PlayerShape.Ball)
         {
-            move *= BallSpeedRatio;
+            if (_IsSquating)
+            {
+                move *= BallSpeedRatio;
+            }
+        }
+        else
+        {
+            if (_IsSquating)
+            {
+                move = Vector2.zero;
+            }
+            else
+            {
+                move *= SquareSpeedRatio;
+            }
         }
 
         // 要么在地面 要么能够空中控制才能移动
@@ -200,8 +220,12 @@ public class CharacterController : MonoBehaviour
         transform.localScale = Vector3.Scale(transform.localScale, new Vector3(-1, 1, 1));
     }
 
-    public void SetPlayerShape(bool changeToBall, bool changeToSquare, bool changeSquating)
+    public void SetPlayerShape(bool changeToBall, bool changeToSquare, bool changeSquat)
     {
+        //Debug.Log(_SquatingKeyReset.ToString()+" "+PlayerShape.ToString()+" "+changeToBall.ToString()+" "+changeToSquare.ToString());
+
+        changeSquat&=_SquatingKeyReset;
+
         switch (PlayerShape)
         {
             case PlayerShape.Ball:
@@ -209,8 +233,7 @@ public class CharacterController : MonoBehaviour
                 {
                     PlayerShape = PlayerShape.Square;
                     _ChangeToSquare = true;
-                    _IsSquating = false;
-                    changeSquating = false;
+                    changeSquat = (_IsSquating);
                 }
                 break;
             case PlayerShape.Square:
@@ -218,23 +241,35 @@ public class CharacterController : MonoBehaviour
                 {
                     PlayerShape = PlayerShape.Ball;
                     _ChangeToBall = true;
-                    _IsSquating = false;
-                    changeSquating = false;
+                    changeSquat = (_IsSquating);
                 }
                 break;
         }
 
         // 处理缩脚
-        if (changeSquating&&_SquatingKeyReset)
+        if (changeSquat)
         {
+            changeSquating();
+        }
+    }
+
+    private void changeSquating(){
             _SquatingKeyReset = false;
             _IsSquating = !_IsSquating;
 
             if (_IsSquating)
             {
-                knockEvent();
+                _SphereCollider.radius = SquatingColliderRadius;
+
+                if(PlayerShape is PlayerShape.Square)
+                {
+                    knockEvent();
+                }
             }
-        }
+            else
+            {
+                _SphereCollider.radius = NormalColliderRadius;
+            }
     }
 
     private void knockEvent()
