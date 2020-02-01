@@ -161,7 +161,7 @@ public class PositionManager : BaseManager
 
         positionDataDict.Add(10,
             new PositionData(new Vector3(-21f, 0, 0), new Vector3(0, 0, -7.5f),
-                new Vector3(0, 0, 0.8f), 2, new Vector3(-15.8f, 0, 0.32f),
+                new Vector3(0, 0, 0.8f), 10, new Vector3(-15.8f, 0, 0.32f),
                 Vector3.zero,Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(11,
