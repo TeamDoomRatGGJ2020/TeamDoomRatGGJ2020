@@ -190,7 +190,6 @@ GameObject:
   - component: {fileID: 8261049265851738833}
   - component: {fileID: 4787033249492009877}
   - component: {fileID: 8119562479915407720}
-  - component: {fileID: 6269755752242834685}
   m_Layer: 5
   m_Name: Bg
   m_TagString: Untagged
@@ -252,20 +251,6 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &6269755752242834685
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1508885027320931765}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1d0744dbcb28b5740b727c38c51930bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bgSlider: {fileID: 0}
-  normalSlider: {fileID: 0}
 --- !u!1 &1822378994842759928
 GameObject:
   m_ObjectHideFlags: 0

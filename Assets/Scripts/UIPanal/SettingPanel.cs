@@ -7,16 +7,16 @@ using UnityEngine.UI;
 public class SettingPanel : BasePanel
 {
     private Image bgImage;
-    public Slider bgSlider;
-    public Slider normalSlider;
+    private Slider bgSlider;
+    private Slider normalSlider;
     private Button closeButton;
     private Button quitButton;
 
     public override void OnEnter()
     {
         base.OnEnter();
-        //bgSlider = transform.Find("BgVolume/Slider").GetComponent<Slider>();
-        //normalSlider = transform.Find("NormalVolume/Slider").GetComponent<Slider>();
+        bgSlider = transform.Find("BgVolume/Slider").GetComponent<Slider>();
+        normalSlider = transform.Find("NormalVolume/Slider").GetComponent<Slider>();
         closeButton = transform.Find("CloseButton").GetComponent<Button>();
         quitButton = transform.Find("QuitButton").GetComponent<Button>();
 
@@ -27,16 +27,9 @@ public class SettingPanel : BasePanel
 
     void Update()
     {
-        //if (bgSlider == null)
-        //{
-        //    bgSlider = transform.Find("BgVolume/Slider").GetComponent<Slider>();
-        //    normalSlider = transform.Find("NormalVolume/Slider").GetComponent<Slider>();
-        //}
         float bgVolume = bgSlider.value;
         float normalVolume = normalSlider.value;
         facade.SetVolume(bgVolume, normalVolume);
-        print(bgSlider);
-        print(bgSlider.value);
     }
 
     private void OnCloseClick()
@@ -46,7 +39,7 @@ public class SettingPanel : BasePanel
 
     private void OnQuitClick()
     {
-
+        Application.Quit();
     }
 
     private void EnterAnim()
