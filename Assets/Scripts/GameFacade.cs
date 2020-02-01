@@ -48,11 +48,6 @@ public class GameFacade : MonoBehaviour
         {
             uiManager.PushPanel(UIPanelType.Setting);
         }
-
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            ShowMessage("aaaa");
-        }
     }
 
     private void Init()
