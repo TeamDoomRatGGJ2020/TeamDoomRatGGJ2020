@@ -151,6 +151,15 @@ public class GameFacade : MonoBehaviour
     {
         audioManager.SetVolume(bgVolume, normalVolume);
     }
+
+    /// <summary>
+    /// 设置是否需要变换音量
+    /// </summary>
+    /// <param name="needChange"></param>
+    public void SetVolumeChangeBool(bool needChange)
+    {
+        audioManager.needChange = needChange;
+    }
     #endregion
 
     #region UI内容

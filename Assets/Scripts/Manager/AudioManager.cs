@@ -11,13 +11,17 @@ public class AudioManager : BaseManager
     private const string Sound_Prefix = "Sounds/";
 
     /// <summary>
-    /// 吃苹果音效
+    /// 背景音乐
     /// </summary>
-    public const string Sound_EatApple = "吃苹果";
+    public const string Sound_BGM = "BGM";
     /// <summary>
     /// 按钮点击音效
     /// </summary>
     public const string Sound_ButtonClick = "ButtonClick";
+    /// <summary>
+    /// 吃苹果音效
+    /// </summary>
+    public const string Sound_EatApple = "吃苹果";
     /// <summary>
     /// 对话气泡音效
     /// </summary>
@@ -27,17 +31,13 @@ public class AudioManager : BaseManager
     /// </summary>
     public const string Sound_Smash = "方块砸地";
     /// <summary>
-    /// 流水声
-    /// </summary>
-    public const string Sound_WaterRunning = "流水声";
-    /// <summary>
-    /// 鸟叫声
-    /// </summary>
-    public const string Sound_BirdCall = "鸟叫声";
-    /// <summary>
     /// 汽车
     /// </summary>
     public const string Sound_Car = "汽车";
+    /// <summary>
+    /// 流水声
+    /// </summary>
+    public const string Sound_WaterRunning = "流水声";
     /// <summary>
     /// 走路（草地）
     /// </summary>
@@ -54,6 +54,10 @@ public class AudioManager : BaseManager
     /// 走路（马路）
     /// </summary>
     public const string Sound_Walk_Road = "走路（马路）";
+    /// <summary>
+    /// 鸟叫声
+    /// </summary>
+    public const string Sound_BirdCall = "鸟叫声";
     #endregion
 
     private AudioSource bgAudioSource;
@@ -70,11 +74,13 @@ public class AudioManager : BaseManager
     public float stopSmoothSpeed = 1f;
     public float startSmoothSpeed = 1f;
 
+    public bool needChange = false;
     public override void OnInit()
     {
         GameObject audioSourceGO = new GameObject("AudioSource(GameObject)");
         bgAudioSource = audioSourceGO.AddComponent<AudioSource>();
         normalAudioSource = audioSourceGO.AddComponent<AudioSource>();
+        PlayBgSound(Sound_BGM);
     }
 
     public override void Update()
@@ -88,11 +94,17 @@ public class AudioManager : BaseManager
         {
             PlayBgSoundSmooth();
         }
+
+        if (needChange)
+        {
+            bgAudioSource.volume = bgVolume;
+            normalAudioSource.volume = normalVolume;
+        }
     }
 
     public void PlayBgSound(string soundName, float volume = 1f)
     {
-        PlaySound(bgAudioSource, LoadSound(soundName), volume * normalVolume, true);
+        PlaySound(bgAudioSource, LoadSound(soundName), volume * bgVolume, true);
     }
 
     public void PlayBgSoundSmoothlySync(string soundName, float volume = 1f)
@@ -106,7 +118,8 @@ public class AudioManager : BaseManager
 
     private void PlayBgSoundSmooth()
     {
-        bgAudioSource.volume = Mathf.Lerp(bgAudioSource.volume, maxVolume, startSmoothSpeed * Time.deltaTime);
+        bgAudioSource.volume =
+            Mathf.Lerp(bgAudioSource.volume, maxVolume * bgVolume, startSmoothSpeed * Time.deltaTime);
         bgAudioSource.clip = LoadSound(soundName);
         if (bgAudioSource.isPlaying == false)
         {
@@ -115,7 +128,7 @@ public class AudioManager : BaseManager
 
         if (Mathf.Abs(bgAudioSource.volume - maxVolume) <= 0.1f)
         {
-            bgAudioSource.volume = maxVolume;
+            bgAudioSource.volume = maxVolume * bgVolume;
             soundName = null;
             maxVolume = 0;
             needPlayBg = false;
