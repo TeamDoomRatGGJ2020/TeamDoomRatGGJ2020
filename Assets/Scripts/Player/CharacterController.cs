@@ -79,6 +79,7 @@ public class CharacterController : MonoBehaviour
     private bool _IsSquating = false;
     private bool _ChangeToBall = false;
     private bool _ChangeToSquare = false;
+    private bool _Movable = false;
 
     private FloorMaterial _FloorMaterial = FloorMaterial.Grass;
 
@@ -132,6 +133,10 @@ public class CharacterController : MonoBehaviour
 
     private void _UpdateShape(ShapeButtonCondition shapeButtonCondition)
     {
+        if(!_Movable){
+            return;
+        }
+        
         SetPlayerShape(shapeButtonCondition.BallButtonDown, shapeButtonCondition.SquareButtonDown, shapeButtonCondition.SquatingButtonDown);
     }
 
@@ -199,7 +204,7 @@ public class CharacterController : MonoBehaviour
         }
         else
         {
-            if (_AudioSource.clip.name.Contains("走路"))
+            if (_AudioSource.clip != null && _AudioSource.clip.name.Contains("走路"))
             {
                 GameFacade.Instance.StopNormalSound(_AudioSource);
             }
@@ -231,6 +236,10 @@ public class CharacterController : MonoBehaviour
 
     public void Move(Vector2 move, bool jump)
     {
+        if(!_Movable){
+            return;
+        }
+
         if (PlayerShape == PlayerShape.Ball)
         {
             if (_IsSquating)
@@ -356,5 +365,7 @@ public class CharacterController : MonoBehaviour
         // TODO
     }
 
-
+    public void ChangeMovable(bool movable){
+        _Movable = movable;
+    }
 }
