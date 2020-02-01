@@ -89,8 +89,7 @@ public class PositionManager : BaseManager
                         playerTransform.localScale = leftScale;
                         break;
                     case Position.Down:
-                        //TODO
-                        playerTransform.localPosition = pd.RightEnterPosition;
+                        playerTransform.localPosition = pd.DownEnterPosition;
                         playerTransform.localScale = leftScale;
                         break;
                 }
@@ -117,16 +116,16 @@ public class PositionManager : BaseManager
         positionDataDict.Add(0,
             new PositionData(new Vector3(-16.2f, 0, 0), new Vector3(0, 0, -7.5f),
                 new Vector3(0, 0, 3), 0, Vector3.zero,
-                new Vector3(12, 0, -1.4f), Vector3.zero, Vector3.zero));
+                new Vector3(11, 0, -1.4f), Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(1,
             new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -7.5f),
                 new Vector3(0, 0, 2), 1, new Vector3(-14, 0, -1.5f),
-                new Vector3(14.5f, 0, 1.1f), Vector3.zero, Vector3.zero));
+                new Vector3(12f, 0, 0.4f), Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(2,
             new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -7.5f),
-                new Vector3(0, 0, 4.5f), 2, new Vector3(-10, 0, 4.2f),
+                new Vector3(0, 0, 4.5f), 2, new Vector3(-10.33f, 0, 3.26f),
                 new Vector3(14, 0, -6), Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(3,
@@ -137,22 +136,22 @@ public class PositionManager : BaseManager
         positionDataDict.Add(4,
             new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -7.5f),
                 new Vector3(0, 0, 0.8f), 4, new Vector3(-15.3f, 0, -3.1f),
-                new Vector3(15.5f, 0, -0.3f), Vector3.zero, Vector3.zero));
+                new Vector3(14.86f, 0, -0.55f), Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(5,
-            new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -7.5f),
-                new Vector3(0, 0, 0.8f), 5, new Vector3(-15.3f, 0, -3.1f),
-                new Vector3(15.5f, 0, -0.3f), Vector3.zero, Vector3.zero));
+            new PositionData(new Vector3(-15.17f, 0, 0), new Vector3(0, 0, -7.5f),
+                new Vector3(0, 0, 0.8f), 5, new Vector3(-10.86f, 0, -1),
+                new Vector3(10.8f, 0, -4.5f), Vector3.zero, new Vector3(0, 0.3f, -3.3f)));
 
         positionDataDict.Add(6,
-            new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -7.5f),
-                new Vector3(0, 0, 0.8f), 6, new Vector3(-15.3f, 0, -3.1f),
-                new Vector3(15.5f, 0, -0.3f), Vector3.zero, Vector3.zero));
+            new PositionData(new Vector3(-15.17f, 0, 0), new Vector3(0, 0, -7.5f),
+                new Vector3(0, 0, 5f), 6, new Vector3(-11.5f, 0, -3.55f),
+                new Vector3(11.33f, 0, -4.5f), Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(7,
             new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -7.5f),
-                new Vector3(0, 0, 0.8f), 7, new Vector3(-15.3f, 0, -3.1f),
-                new Vector3(15.5f, 0, -0.3f), Vector3.zero, Vector3.zero));
+                new Vector3(0, 0, 0.8f), 7, new Vector3(-11.5f, 0, -3.55f),
+                new Vector3(10.8f, 0, -4.5f), Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(8,
             new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -7.5f),
@@ -161,7 +160,7 @@ public class PositionManager : BaseManager
 
         positionDataDict.Add(10,
             new PositionData(new Vector3(-21f, 0, 0), new Vector3(0, 0, -7.5f),
-                new Vector3(0, 0, 0.8f), 10, new Vector3(-15.8f, 0, 0.32f),
+                new Vector3(0, 0, 0.8f), 10, new Vector3(-14.83f, 0, -0.88f),
                 Vector3.zero,Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(11,

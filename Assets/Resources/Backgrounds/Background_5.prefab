@@ -87,7 +87,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 5, z: 50}
-  m_Center: {x: -16, y: 0, z: 0}
+  m_Center: {x: -13.5, y: 0, z: 0}
 --- !u!1 &8988706270734763428
 GameObject:
   m_ObjectHideFlags: 0
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 8988706270734763430}
   - component: {fileID: 8988706270734763429}
   m_Layer: 0
-  m_Name: BackgroundFix_5
+  m_Name: Background_5
   m_TagString: Background
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -159,7 +159,7 @@ SpriteRenderer:
   m_SortingLayerID: 1306289251
   m_SortingLayer: 1
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 2fd24a9ac5142be4a82701dffa435ed2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 984cf1b7a8aad6c4db2c5d84b174a558, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -213,4 +213,4 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 5, z: 50}
-  m_Center: {x: 16, y: 0, z: 0}
+  m_Center: {x: 13.5, y: 0, z: 0}

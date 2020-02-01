@@ -24,12 +24,12 @@ public class PlayerTrigger : MonoBehaviour
 
     private Image bgImage = null;
     private Position enterPosition = Position.Null;
-    private int index = -1;
+    private int index;
 
     void Start()
     {
         facade = GameFacade.Instance;
-        index = facade.GetPresentIndex();
+        DOTween.To(() => timeCount, a => timeCount = a, 1, 0.1f).OnComplete(() => index = facade.GetPresentIndex());
     }
 
     void OnTriggerEnter(Collider collision)
@@ -40,10 +40,12 @@ public class PlayerTrigger : MonoBehaviour
         }
         else if (collision.tag == "Mission")
         {
+            print(collision.name);
             OnMission(collision);
         }
         else if (collision.tag == "Audio")
         {
+            print(collision.name);
             OnSwitchAudio(collision);
         }
     }

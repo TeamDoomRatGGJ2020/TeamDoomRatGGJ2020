@@ -8,6 +8,7 @@ TagManager:
   - Background
   - Mission
   - Audio
+  - Element
   layers:
   - Default
   - TransparentFX
