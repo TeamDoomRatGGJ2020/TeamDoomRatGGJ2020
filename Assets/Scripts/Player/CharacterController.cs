@@ -24,7 +24,7 @@ public class CharacterController : MonoBehaviour
     public float BallSpeedRatio = 2f;
     #endregion
 
-
+    #region 滞空相关 没有跳跃那就没用
     // 地面所属Layer 判断是否滞空需要用
     public LayerMask GroundLayer;
     // 用于判断是否滞空的Object
@@ -33,11 +33,14 @@ public class CharacterController : MonoBehaviour
     const float GroundCheckRadius = .1f;
     // 是否滞空
     private bool _IsGrounding;
+    #endregion
 
     // 是否面朝右边
     private bool _FacingRight = true;
-
-    private Vector3 _Velocity = Vector3.zero;
+    private Vector2 _Move;
+    private bool _Jump;
+    public Vector2 Speed = new Vector2(1, 1);
+    //private Vector3 _Velocity = Vector3.zero;
 
     #region 避免连续跳跃
     // 着地检测冷却时间
@@ -46,33 +49,61 @@ public class CharacterController : MonoBehaviour
     #endregion
 
     private Rigidbody _Rigidbody;
-
-    public UnityEvent OnLandEvent;
+    private UnityEvent _OnLandEvent;
+    private Animator _Animator;
 
     public PlayerShape PlayerShape = PlayerShape.Normal;
+    private bool _IsSquating = false;
 
-    private bool _IsKnocking = false;
-
-    
 
 
     private void Awake()
     {
         _Rigidbody = GetComponent<Rigidbody>();
+        _Animator = GetComponent<Animator>();
 
-        if (OnLandEvent is null)
+        if (_OnLandEvent is null)
         {
-            OnLandEvent = new UnityEvent();
+            _OnLandEvent = new UnityEvent();
 
-            OnLandEvent.AddListener(land);
+            _OnLandEvent.AddListener(land);
         }
     }
 
     // 落地会发生什么
     private void land() { }
 
+    private void Update()
+    {
+        // Movement
+        _Move.x = Input.GetAxis("Horizontal");
+        _Move.y = Input.GetAxis("Vertical");
+        _Move *= Speed;
+
+        _Jump = Input.GetButton("Jump");
+
+        bool ballButtonDown = Input.GetButton("BallMode");
+        bool squareButtonDown = Input.GetButton("SquareMode");
+        bool liquidButtonDown = Input.GetButton("LiquidMode");
+        bool knockButtonDown = Input.GetButton("Knock");
+        SetPlayerShape(ballButtonDown, squareButtonDown, liquidButtonDown, knockButtonDown);
+
+
+        // Animation
+        float velocity = _Rigidbody.velocity.magnitude;
+        _Animator.SetFloat("Speed",velocity);
+        _Animator.SetBool("IsBall",PlayerShape is PlayerShape.Ball);
+        _Animator.SetBool("IsSquare", PlayerShape is PlayerShape.Square);
+        _Animator.SetBool("IsLiquid",PlayerShape is PlayerShape.Liquid);
+
+
+        _Animator.SetBool("IsSquating",_IsSquating);
+    }
+
     private void FixedUpdate()
     {
+        Move(_Move, _Jump);
+
         bool wasGrounding = _IsGrounding;
         _IsGrounding = false;
 
@@ -86,12 +117,10 @@ public class CharacterController : MonoBehaviour
                 {
                     _IsGrounding = true;
                     if (!wasGrounding)
-                        OnLandEvent.Invoke();
+                        _OnLandEvent.Invoke();
                 }
             }
         }
-
-        //Debug.Log("IsGrounding = "+_IsGrounding.ToString());
     }
 
     public void Move(Vector2 move, bool jump)
@@ -217,7 +246,7 @@ public class CharacterController : MonoBehaviour
 
         if (PlayerShape is PlayerShape.Square)
         {
-            _IsKnocking = true;
+            _IsSquating = true;
             knockEvent();
         }
     }
