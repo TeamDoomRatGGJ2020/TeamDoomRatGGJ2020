@@ -6,10 +6,15 @@ using UnityEngine.Events;
 
 public enum PlayerShape
 {
-    Normal,
     Ball,
-    Square,
-    Liquid
+    Square
+}
+
+public struct ShapeButtonCondition
+{
+    public bool BallButtonDown;
+    public bool SquareButtonDown;
+    public bool SquatingButtonDown;
 }
 
 public class CharacterController : MonoBehaviour
@@ -52,9 +57,12 @@ public class CharacterController : MonoBehaviour
     private UnityEvent _OnLandEvent;
     private Animator _Animator;
 
-    public PlayerShape PlayerShape = PlayerShape.Normal;
+    public PlayerShape PlayerShape = PlayerShape.Ball;
+    // 保证每次检测伸缩脚之前该键已经被抬起来了 避免按住然后连续伸缩
+    private bool _SquatingKeyReset = true;
     private bool _IsSquating = false;
-
+    private bool _ChangeToBall = false;
+    private bool _ChangeToSquare = false;
 
 
     private void Awake()
@@ -73,7 +81,7 @@ public class CharacterController : MonoBehaviour
     // 落地会发生什么
     private void land() { }
 
-    private void Update()
+    private ShapeButtonCondition _UpdateInput()
     {
         // Movement
         _Move.x = Input.GetAxis("Horizontal");
@@ -82,22 +90,51 @@ public class CharacterController : MonoBehaviour
 
         _Jump = Input.GetButton("Jump");
 
+
+        // ShapeChange
         bool ballButtonDown = Input.GetButton("BallMode");
         bool squareButtonDown = Input.GetButton("SquareMode");
-        bool liquidButtonDown = Input.GetButton("LiquidMode");
-        bool knockButtonDown = Input.GetButton("Knock");
-        SetPlayerShape(ballButtonDown, squareButtonDown, liquidButtonDown, knockButtonDown);
+        bool squatingButtonDown = Input.GetButton("Squat");
+        if(squatingButtonDown is false)
+        {
+            _SquatingKeyReset = true;
+        }
+        return new ShapeButtonCondition
+        {
+            BallButtonDown = ballButtonDown,
+            SquareButtonDown = squareButtonDown,
+            SquatingButtonDown = squatingButtonDown
+        };
+    }
 
+    private void _UpdateShape(ShapeButtonCondition shapeButtonCondition)
+    {
+        SetPlayerShape(shapeButtonCondition.BallButtonDown, shapeButtonCondition.SquareButtonDown, shapeButtonCondition.SquatingButtonDown);
+    }
 
-        // Animation
+    private void _UpdateAnimation()
+    {
         float velocity = _Rigidbody.velocity.magnitude;
-        _Animator.SetFloat("Speed",velocity);
-        _Animator.SetBool("IsBall",PlayerShape is PlayerShape.Ball);
-        _Animator.SetBool("IsSquare", PlayerShape is PlayerShape.Square);
-        _Animator.SetBool("IsLiquid",PlayerShape is PlayerShape.Liquid);
+        _Animator.SetFloat("Speed", velocity);
+        //_Animator.SetBool("IsBall", PlayerShape is PlayerShape.Ball);
+        //_Animator.SetBool("IsSquare", PlayerShape is PlayerShape.Square);
+        _Animator.SetBool("ChangeBallTrigger",_ChangeToBall);
+        _Animator.SetBool("ChangeSquareTrigger",_ChangeToSquare);
+        _ChangeToBall = false;
+        _ChangeToSquare = false;
+
+        _Animator.SetBool("IsSquating", _IsSquating);
+    }
+
+    private void Update()
+    {
+        var buttonCondition = _UpdateInput();
+
+        _UpdateShape(buttonCondition);
+
+        _UpdateAnimation();
 
 
-        _Animator.SetBool("IsSquating",_IsSquating);
     }
 
     private void FixedUpdate()
@@ -158,101 +195,50 @@ public class CharacterController : MonoBehaviour
 
     private void Flip()
     {
-        // 液体状态不转身？
-        if (PlayerShape is PlayerShape.Liquid)
-        {
-            return;
-        }
-
         _FacingRight = !_FacingRight;
 
         transform.localScale = Vector3.Scale(transform.localScale, new Vector3(-1, 1, 1));
     }
 
-    public void SetPlayerShape(bool changeToBall, bool changeToSquare, bool changeToLiquid, bool isKnocking)
+    public void SetPlayerShape(bool changeToBall, bool changeToSquare, bool changeSquating)
     {
-        Debug.Log(PlayerShape.ToString() + " " + changeToBall.ToString() + " " + changeToSquare.ToString());
         switch (PlayerShape)
         {
-            case PlayerShape.Normal:
-                if (changeToBall)
-                {
-                    PlayerShape = PlayerShape.Ball;
-                }
-                else if (changeToSquare)
-                {
-                    PlayerShape = PlayerShape.Square;
-                }
-                else if (changeToLiquid)
-                {
-                    PlayerShape = PlayerShape.Liquid;
-                }
-                break;
             case PlayerShape.Ball:
-                if (changeToBall)
-                {
-                    break;
-                }
-                else if (changeToSquare)
+                if (changeToBall is false && changeToSquare is true)
                 {
                     PlayerShape = PlayerShape.Square;
-                }
-                else if (changeToLiquid)
-                {
-                    PlayerShape = PlayerShape.Liquid;
-                }
-                else
-                {
-                    PlayerShape = PlayerShape.Normal;
+                    _ChangeToSquare = true;
+                    _IsSquating = false;
+                    changeSquating = false;
                 }
                 break;
             case PlayerShape.Square:
-                if (changeToSquare)
-                {
-                    break;
-                }
-                else if (changeToBall)
+                if (changeToSquare is false && changeToBall is true)
                 {
                     PlayerShape = PlayerShape.Ball;
-                }
-                else if (changeToLiquid)
-                {
-                    PlayerShape = PlayerShape.Liquid;
-                }
-                else
-                {
-                    PlayerShape = PlayerShape.Normal;
-                }
-                break;
-            case PlayerShape.Liquid:
-                if (changeToLiquid)
-                {
-                    break;
-                }
-                else if (changeToBall)
-                {
-                    PlayerShape = PlayerShape.Ball;
-                }
-                else if (changeToSquare)
-                {
-                    PlayerShape = PlayerShape.Square;
-                }
-                else
-                {
-                    PlayerShape = PlayerShape.Normal;
+                    _ChangeToBall = true;
+                    _IsSquating = false;
+                    changeSquating = false;
                 }
                 break;
         }
 
-        if (PlayerShape is PlayerShape.Square)
+        // 处理缩脚
+        if (changeSquating&&_SquatingKeyReset)
         {
-            _IsSquating = true;
-            knockEvent();
+            _SquatingKeyReset = false;
+            _IsSquating = !_IsSquating;
+
+            if (_IsSquating)
+            {
+                knockEvent();
+            }
         }
     }
 
     private void knockEvent()
     {
-        throw new NotImplementedException();
+        //throw new NotImplementedException();
     }
 }
