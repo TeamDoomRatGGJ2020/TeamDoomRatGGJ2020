@@ -45,7 +45,7 @@ public class CharacterController : MonoBehaviour
     #endregion
 
     // 是否面朝右边
-    private bool _FacingRight = true;
+    private bool _FacingRight;
     private Vector2 _Move;
     private bool _Jump;
     public Vector2 Speed = new Vector2(1, 1);
@@ -61,6 +61,7 @@ public class CharacterController : MonoBehaviour
     private UnityEvent _OnLandEvent;
     private Animator _Animator;
     private SphereCollider _SphereCollider;
+    private Animator _EyesAnimator;
 
     public PlayerShape PlayerShape = PlayerShape.Ball;
     // 保证每次检测伸缩脚之前该键已经被抬起来了 避免按住然后连续伸缩
@@ -75,6 +76,7 @@ public class CharacterController : MonoBehaviour
         _Rigidbody = GetComponent<Rigidbody>();
         _Animator = GetComponent<Animator>();
         _SphereCollider = GetComponent<SphereCollider>();
+        _EyesAnimator = GameObject.Find("Eyes").GetComponent<Animator>();
 
         if (_OnLandEvent is null)
         {
@@ -139,8 +141,6 @@ public class CharacterController : MonoBehaviour
         _UpdateShape(buttonCondition);
 
         _UpdateAnimation();
-
-
     }
 
     private void FixedUpdate()
@@ -192,6 +192,7 @@ public class CharacterController : MonoBehaviour
         {
             // 处理速度
             _Rigidbody.velocity = new Vector3(move.x, _Rigidbody.velocity.y, move.y);
+            _FacingRight = transform.localScale.x > 0;
 
             // 处理左右朝向反面
             if (move.x > 0 && !_FacingRight)
@@ -215,7 +216,7 @@ public class CharacterController : MonoBehaviour
 
     private void Flip()
     {
-        _FacingRight = !_FacingRight;
+        // _FacingRight = !_FacingRight;
 
         transform.localScale = Vector3.Scale(transform.localScale, new Vector3(-1, 1, 1));
     }
@@ -275,5 +276,9 @@ public class CharacterController : MonoBehaviour
     private void knockEvent()
     {
         //throw new NotImplementedException();
+    }
+
+    public void ShakeHead(){
+        _EyesAnimator.SetTrigger("ShakeHeadTrigger");
     }
 }
