@@ -11,13 +11,17 @@ public class AudioManager : BaseManager
     private const string Sound_Prefix = "Sounds/";
 
     /// <summary>
-    /// 吃苹果音效
+    /// 背景音乐
     /// </summary>
-    public const string Sound_EatApple = "吃苹果";
+    public const string Sound_BGM = "BGM";
     /// <summary>
     /// 按钮点击音效
     /// </summary>
     public const string Sound_ButtonClick = "ButtonClick";
+    /// <summary>
+    /// 吃苹果音效
+    /// </summary>
+    public const string Sound_EatApple = "吃苹果";
     /// <summary>
     /// 对话气泡音效
     /// </summary>
@@ -27,17 +31,13 @@ public class AudioManager : BaseManager
     /// </summary>
     public const string Sound_Smash = "方块砸地";
     /// <summary>
-    /// 流水声
-    /// </summary>
-    public const string Sound_WaterRunning = "流水声";
-    /// <summary>
-    /// 鸟叫声
-    /// </summary>
-    public const string Sound_BirdCall = "鸟叫声";
-    /// <summary>
     /// 汽车
     /// </summary>
     public const string Sound_Car = "汽车";
+    /// <summary>
+    /// 流水声
+    /// </summary>
+    public const string Sound_WaterRunning = "流水声";
     /// <summary>
     /// 走路（草地）
     /// </summary>
@@ -54,6 +54,10 @@ public class AudioManager : BaseManager
     /// 走路（马路）
     /// </summary>
     public const string Sound_Walk_Road = "走路（马路）";
+    /// <summary>
+    /// 鸟叫声
+    /// </summary>
+    public const string Sound_BirdCall = "鸟叫声";
     #endregion
 
     private AudioSource bgAudioSource;
@@ -62,19 +66,18 @@ public class AudioManager : BaseManager
     private bool needStopBg = false;
     private bool needPlayBg = false;
     private string soundName = null;
-    private float maxVolume = 0;
 
     private float bgVolume = 1f;
     private float normalVolume = 1f;
 
     public float stopSmoothSpeed = 1f;
     public float startSmoothSpeed = 1f;
-
     public override void OnInit()
     {
         GameObject audioSourceGO = new GameObject("AudioSource(GameObject)");
         bgAudioSource = audioSourceGO.AddComponent<AudioSource>();
         normalAudioSource = audioSourceGO.AddComponent<AudioSource>();
+        PlayBgSound(Sound_BGM);
     }
 
     public override void Update()
@@ -88,51 +91,52 @@ public class AudioManager : BaseManager
         {
             PlayBgSoundSmooth();
         }
+
+        bgAudioSource.volume = bgVolume;
+        normalAudioSource.volume = normalVolume;
     }
 
-    public void PlayBgSound(string soundName, float volume = 1f)
+    public void PlayBgSound(string soundName)
     {
-        PlaySound(bgAudioSource, LoadSound(soundName), volume * normalVolume, true);
+        PlaySound(bgAudioSource, LoadSound(soundName), bgVolume, true);
     }
 
-    public void PlayBgSoundSmoothlySync(string soundName, float volume = 1f)
+    public void PlayBgSoundSmoothlySync(string soundName)
     {
         needPlayBg = true;
         bgAudioSource.volume = 0;
         bgAudioSource.loop = true;
         this.soundName = soundName;
-        this.maxVolume = volume * bgVolume;
     }
 
     private void PlayBgSoundSmooth()
     {
-        bgAudioSource.volume = Mathf.Lerp(bgAudioSource.volume, maxVolume, startSmoothSpeed * Time.deltaTime);
+        bgAudioSource.volume =
+            Mathf.Lerp(bgAudioSource.volume, bgVolume, startSmoothSpeed * Time.deltaTime);
         bgAudioSource.clip = LoadSound(soundName);
         if (bgAudioSource.isPlaying == false)
         {
             bgAudioSource.Play();
         }
 
-        if (Mathf.Abs(bgAudioSource.volume - maxVolume) <= 0.1f)
+        if (Mathf.Abs(bgAudioSource.volume - bgVolume) <= 0.1f)
         {
-            bgAudioSource.volume = maxVolume;
+            bgAudioSource.volume = bgVolume;
             soundName = null;
-            maxVolume = 0;
             needPlayBg = false;
         }
     }
 
-    public void PlayNormalSound(string soundName, AudioSource audioSource, float volume = 1f)
+    public void PlayNormalSound(string soundName, AudioSource audioSource)
     {
         if (audioSource == null)
         {
-            PlaySound(normalAudioSource, LoadSound(soundName), volume * normalVolume);
+            PlaySound(normalAudioSource, LoadSound(soundName), normalVolume);
         }
         else
         {
-            PlaySound(audioSource, LoadSound(soundName), volume * normalVolume);
+            PlaySound(audioSource, LoadSound(soundName), normalVolume);
         }
-
     }
 
     public void StopBgSound()

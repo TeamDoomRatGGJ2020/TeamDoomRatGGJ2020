@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,6 +18,10 @@ public class GameFacade : MonoBehaviour
 
     private AudioManager audioManager;
     private UIManager uiManager;
+    private SceneManager sceneManager;
+    private PositionManager positionManager;
+
+    private float timeCount;
 
     public float stopSmoothSpeed = 1f;
     public float startSmoothSpeed = 1f;
@@ -54,21 +59,29 @@ public class GameFacade : MonoBehaviour
     {
         audioManager = new AudioManager(this);
         uiManager = new UIManager(this);
+        sceneManager = new SceneManager(this);
+        positionManager = new PositionManager(this);
 
         audioManager.OnInit();
         uiManager.OnInit();
+        sceneManager.OnInit();
+        positionManager.OnInit();
     }
 
     private void UpdateManager()
     {
         audioManager.Update();
         uiManager.Update();
+        sceneManager.Update();
+        positionManager.Update();
     }
 
     private void OnDestroy()
     {
         audioManager.OnDestroy();
         uiManager.OnDestroy();
+        sceneManager.OnDestroy();
+        positionManager.OnDestroy();
     }
 
     #region Audio内容
@@ -78,9 +91,9 @@ public class GameFacade : MonoBehaviour
     /// </summary>
     /// <param name="soundName">背景音乐路径</param>
     /// <param name="volume">音量</param>
-    public void PlayBgSound(string soundName, float volume = 1f)
+    public void PlayBgSound(string soundName)
     {
-        audioManager.PlayBgSound(soundName, volume);
+        audioManager.PlayBgSound(soundName);
     }
 
     /// <summary>
@@ -88,9 +101,9 @@ public class GameFacade : MonoBehaviour
     /// </summary>
     /// <param name="soundName">背景音乐路径</param>
     /// <param name="volume">音量</param>
-    public void PlayBgSoundSmoothlySync(string soundName, float volume = 1f)
+    public void PlayBgSoundSmoothlySync(string soundName)
     {
-        audioManager.PlayBgSoundSmoothlySync(soundName, volume);
+        audioManager.PlayBgSoundSmoothlySync(soundName);
     }
 
     /// <summary>
@@ -99,9 +112,9 @@ public class GameFacade : MonoBehaviour
     /// <param name="soundName">音效路径</param>
     /// <param name="audioSource">播放物体身上的AudioSource组件</param>
     /// <param name="volume">音量大小</param>
-    public void PlayNormalSound(string soundName, AudioSource audioSource, float volume = 1f)
+    public void PlayNormalSound(string soundName, AudioSource audioSource)
     {
-        audioManager.PlayNormalSound(soundName, audioSource, volume);
+        audioManager.PlayNormalSound(soundName, audioSource);
     }
 
     /// <summary>
@@ -149,6 +162,54 @@ public class GameFacade : MonoBehaviour
     public void ShowMessage(string msg)
     {
         uiManager.ShowMessage(msg);
+    }
+
+    /// <summary>
+    /// 显示切换动画
+    /// </summary>
+    public void ShowSwitch()
+    {
+        uiManager.ShowSwitch();
+    }
+    #endregion
+
+    #region Scene内容
+
+    /// <summary>
+    /// 根据编码加载场景
+    /// </summary>
+    /// <param name="index">场景编码</param>
+    public void SwitchScene(int index,Position enterPosition)
+    {
+        uiManager.ShowSwitch();
+        DOTween.To(() => timeCount, a => timeCount = a, 1, 0.7f).OnComplete(delegate()
+            {
+                sceneManager.SwitchScene(index);
+                SetPosition(index, enterPosition);
+            });
+    }
+
+    /// <summary>
+    /// 取得当前场景编码
+    /// </summary>
+    /// <returns>当前场景编码</returns>
+    public int GetPresentIndex()
+    {
+        return sceneManager.GetPresentIndex();
+    }
+
+    #endregion
+
+    #region Position内容
+
+    /// <summary>
+    /// 设置玩家的位置
+    /// </summary>
+    /// <param name="index">场景编号</param>
+    /// <param name="enterPosition">触碰场景边缘的位置</param>
+    public void SetPosition(int index, Position enterPosition)
+    {
+        positionManager.SetPosition(index, enterPosition);
     }
 
     #endregion

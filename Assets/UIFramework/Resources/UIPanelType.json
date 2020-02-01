@@ -8,6 +8,16 @@
     {
       "panelTypeString": "Setting",
       "path": "UIPanel/SettingPanel"
+    },
+
+    {
+      "panelTypeString": "Switch",
+      "path": "UIPanel/SwitchPanel"
+    },
+
+    {
+      "panelTypeString": "Start",
+      "path": "UIPanel/StartPanel"
     }
   ]
 }
