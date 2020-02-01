@@ -1,15 +1,27 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum PlayerShape
+{
+    Normal,
+    Ball,
+    Square,
+    Liquid
+}
+
 public class CharacterController : MonoBehaviour
 {
     #region 属性设置
+    public bool CanJump = false;
     // 弹跳力
     public float JumpForce = 400f;
     // 是否能在空中控制
     public bool CanAriControl = false;
+    // 变成球的加速倍数
+    public float BallSpeedRatio = 2f;
     #endregion
 
 
@@ -24,6 +36,7 @@ public class CharacterController : MonoBehaviour
 
     // 是否面朝右边
     private bool _FacingRight = true;
+
     private Vector3 _Velocity = Vector3.zero;
 
     #region 避免连续跳跃
@@ -35,6 +48,12 @@ public class CharacterController : MonoBehaviour
     private Rigidbody _Rigidbody;
 
     public UnityEvent OnLandEvent;
+
+    public PlayerShape PlayerShape = PlayerShape.Normal;
+
+    private bool _IsKnocking = false;
+
+    
 
 
     private void Awake()
@@ -77,6 +96,11 @@ public class CharacterController : MonoBehaviour
 
     public void Move(Vector2 move, bool jump)
     {
+        if (PlayerShape == PlayerShape.Ball)
+        {
+            move *= BallSpeedRatio;
+        }
+
         // 要么在地面 要么能够空中控制才能移动
         if (_IsGrounding || CanAriControl)
         {
@@ -94,7 +118,7 @@ public class CharacterController : MonoBehaviour
             }
         }
 
-        if (_IsGrounding && jump)
+        if (CanJump && _IsGrounding && jump)
         {
             _IsGrounding = false;
 
@@ -105,8 +129,101 @@ public class CharacterController : MonoBehaviour
 
     private void Flip()
     {
+        // 液体状态不转身？
+        if (PlayerShape is PlayerShape.Liquid)
+        {
+            return;
+        }
+
         _FacingRight = !_FacingRight;
 
         transform.localScale = Vector3.Scale(transform.localScale, new Vector3(-1, 1, 1));
+    }
+
+    public void SetPlayerShape(bool changeToBall, bool changeToSquare, bool changeToLiquid, bool isKnocking)
+    {
+        Debug.Log(PlayerShape.ToString() + " " + changeToBall.ToString() + " " + changeToSquare.ToString());
+        switch (PlayerShape)
+        {
+            case PlayerShape.Normal:
+                if (changeToBall)
+                {
+                    PlayerShape = PlayerShape.Ball;
+                }
+                else if (changeToSquare)
+                {
+                    PlayerShape = PlayerShape.Square;
+                }
+                else if (changeToLiquid)
+                {
+                    PlayerShape = PlayerShape.Liquid;
+                }
+                break;
+            case PlayerShape.Ball:
+                if (changeToBall)
+                {
+                    break;
+                }
+                else if (changeToSquare)
+                {
+                    PlayerShape = PlayerShape.Square;
+                }
+                else if (changeToLiquid)
+                {
+                    PlayerShape = PlayerShape.Liquid;
+                }
+                else
+                {
+                    PlayerShape = PlayerShape.Normal;
+                }
+                break;
+            case PlayerShape.Square:
+                if (changeToSquare)
+                {
+                    break;
+                }
+                else if (changeToBall)
+                {
+                    PlayerShape = PlayerShape.Ball;
+                }
+                else if (changeToLiquid)
+                {
+                    PlayerShape = PlayerShape.Liquid;
+                }
+                else
+                {
+                    PlayerShape = PlayerShape.Normal;
+                }
+                break;
+            case PlayerShape.Liquid:
+                if (changeToLiquid)
+                {
+                    break;
+                }
+                else if (changeToBall)
+                {
+                    PlayerShape = PlayerShape.Ball;
+                }
+                else if (changeToSquare)
+                {
+                    PlayerShape = PlayerShape.Square;
+                }
+                else
+                {
+                    PlayerShape = PlayerShape.Normal;
+                }
+                break;
+        }
+
+        if (PlayerShape is PlayerShape.Square)
+        {
+            _IsKnocking = true;
+            knockEvent();
+        }
+    }
+
+    private void knockEvent()
+    {
+        throw new NotImplementedException();
     }
 }
