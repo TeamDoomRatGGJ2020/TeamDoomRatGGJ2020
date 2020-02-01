@@ -32,6 +32,7 @@ public class UIManager : BaseManager
     {
         base.OnInit();
         PushPanel(UIPanelType.Message);
+        PushPanel(UIPanelType.Start);
     }
 
     public override void Update()
@@ -157,6 +158,6 @@ public class UIManager : BaseManager
 
     public void ShowSwitch()
     {
-        PushPanel(UIPanelType.Switch);
+        PushPanel(UIPanelType.Scene);
     }
 }
