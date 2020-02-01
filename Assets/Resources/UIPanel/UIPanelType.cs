@@ -7,5 +7,6 @@ public enum UIPanelType
 {
     None,
     Message,
-    Setting
+    Setting,
+    Switch
 }

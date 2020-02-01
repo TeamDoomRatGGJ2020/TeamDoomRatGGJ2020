@@ -154,4 +154,9 @@ public class UIManager : BaseManager
 
         msgPanal.ShowMessage(msg);
     }
+
+    public void ShowSwitch()
+    {
+        PushPanel(UIPanelType.Switch);
+    }
 }
