@@ -91,9 +91,9 @@ public class GameFacade : MonoBehaviour
     /// </summary>
     /// <param name="soundName">背景音乐路径</param>
     /// <param name="volume">音量</param>
-    public void PlayBgSound(string soundName, float volume = 1f)
+    public void PlayBgSound(string soundName)
     {
-        audioManager.PlayBgSound(soundName, volume);
+        audioManager.PlayBgSound(soundName);
     }
 
     /// <summary>
@@ -101,9 +101,9 @@ public class GameFacade : MonoBehaviour
     /// </summary>
     /// <param name="soundName">背景音乐路径</param>
     /// <param name="volume">音量</param>
-    public void PlayBgSoundSmoothlySync(string soundName, float volume = 1f)
+    public void PlayBgSoundSmoothlySync(string soundName)
     {
-        audioManager.PlayBgSoundSmoothlySync(soundName, volume);
+        audioManager.PlayBgSoundSmoothlySync(soundName);
     }
 
     /// <summary>
@@ -112,9 +112,9 @@ public class GameFacade : MonoBehaviour
     /// <param name="soundName">音效路径</param>
     /// <param name="audioSource">播放物体身上的AudioSource组件</param>
     /// <param name="volume">音量大小</param>
-    public void PlayNormalSound(string soundName, AudioSource audioSource, float volume = 1f)
+    public void PlayNormalSound(string soundName, AudioSource audioSource)
     {
-        audioManager.PlayNormalSound(soundName, audioSource, volume);
+        audioManager.PlayNormalSound(soundName, audioSource);
     }
 
     /// <summary>
@@ -150,15 +150,6 @@ public class GameFacade : MonoBehaviour
     public void SetVolume(float bgVolume, float normalVolume)
     {
         audioManager.SetVolume(bgVolume, normalVolume);
-    }
-
-    /// <summary>
-    /// 设置是否需要变换音量
-    /// </summary>
-    /// <param name="needChange"></param>
-    public void SetVolumeChangeBool(bool needChange)
-    {
-        audioManager.needChange = needChange;
     }
     #endregion
 

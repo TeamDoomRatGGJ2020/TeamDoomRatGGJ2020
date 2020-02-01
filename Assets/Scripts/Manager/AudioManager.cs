@@ -66,15 +66,12 @@ public class AudioManager : BaseManager
     private bool needStopBg = false;
     private bool needPlayBg = false;
     private string soundName = null;
-    private float maxVolume = 0;
 
     private float bgVolume = 1f;
     private float normalVolume = 1f;
 
     public float stopSmoothSpeed = 1f;
     public float startSmoothSpeed = 1f;
-
-    public bool needChange = false;
     public override void OnInit()
     {
         GameObject audioSourceGO = new GameObject("AudioSource(GameObject)");
@@ -95,55 +92,50 @@ public class AudioManager : BaseManager
             PlayBgSoundSmooth();
         }
 
-        if (needChange)
-        {
-            bgAudioSource.volume = bgVolume;
-            normalAudioSource.volume = normalVolume;
-        }
+        bgAudioSource.volume = bgVolume;
+        normalAudioSource.volume = normalVolume;
     }
 
-    public void PlayBgSound(string soundName, float volume = 1f)
+    public void PlayBgSound(string soundName)
     {
-        PlaySound(bgAudioSource, LoadSound(soundName), volume * bgVolume, true);
+        PlaySound(bgAudioSource, LoadSound(soundName), bgVolume, true);
     }
 
-    public void PlayBgSoundSmoothlySync(string soundName, float volume = 1f)
+    public void PlayBgSoundSmoothlySync(string soundName)
     {
         needPlayBg = true;
         bgAudioSource.volume = 0;
         bgAudioSource.loop = true;
         this.soundName = soundName;
-        this.maxVolume = volume * bgVolume;
     }
 
     private void PlayBgSoundSmooth()
     {
         bgAudioSource.volume =
-            Mathf.Lerp(bgAudioSource.volume, maxVolume * bgVolume, startSmoothSpeed * Time.deltaTime);
+            Mathf.Lerp(bgAudioSource.volume, bgVolume, startSmoothSpeed * Time.deltaTime);
         bgAudioSource.clip = LoadSound(soundName);
         if (bgAudioSource.isPlaying == false)
         {
             bgAudioSource.Play();
         }
 
-        if (Mathf.Abs(bgAudioSource.volume - maxVolume) <= 0.1f)
+        if (Mathf.Abs(bgAudioSource.volume - bgVolume) <= 0.1f)
         {
-            bgAudioSource.volume = maxVolume * bgVolume;
+            bgAudioSource.volume = bgVolume;
             soundName = null;
-            maxVolume = 0;
             needPlayBg = false;
         }
     }
 
-    public void PlayNormalSound(string soundName, AudioSource audioSource, float volume = 1f)
+    public void PlayNormalSound(string soundName, AudioSource audioSource)
     {
         if (audioSource == null)
         {
-            PlaySound(normalAudioSource, LoadSound(soundName), volume * normalVolume);
+            PlaySound(normalAudioSource, LoadSound(soundName), normalVolume);
         }
         else
         {
-            PlaySound(audioSource, LoadSound(soundName), volume * normalVolume);
+            PlaySound(audioSource, LoadSound(soundName), normalVolume);
         }
 
     }

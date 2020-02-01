@@ -45,13 +45,11 @@ public class SettingPanel : BasePanel
     private void EnterAnim()
     {
         gameObject.SetActive(true);
-        facade.SetVolumeChangeBool(true);
     }
 
     private void ExitAnim()
     {
         gameObject.SetActive(false);
-        facade.SetVolumeChangeBool(false);
         uiManager.PopPanel();
     }
 }
