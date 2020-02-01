@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class GameFacade : MonoBehaviour
@@ -42,6 +43,16 @@ public class GameFacade : MonoBehaviour
 
         audioManager.startSmoothSpeed = startSmoothSpeed;
         audioManager.stopSmoothSpeed = stopSmoothSpeed;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            uiManager.PushPanel(UIPanelType.Setting);
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            ShowMessage("aaaa");
+        }
     }
 
     private void Init()
@@ -121,6 +132,16 @@ public class GameFacade : MonoBehaviour
     public void StopBgSoundSmoothlySync()
     {
         audioManager.StopBgSoundSmoothlySync();
+    }
+
+    /// <summary>
+    /// 设置音量
+    /// </summary>
+    /// <param name="bgVolume">背景音量</param>
+    /// <param name="normalVolume">音效音量</param>
+    public void SetVolume(float bgVolume, float normalVolume)
+    {
+        audioManager.SetVolume(bgVolume, normalVolume);
     }
     #endregion
 

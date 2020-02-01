@@ -6,5 +6,6 @@ using System;
 public enum UIPanelType
 {
     None,
-    Message
+    Message,
+    Setting
 }

@@ -64,6 +64,9 @@ public class AudioManager : BaseManager
     private string soundName = null;
     private float maxVolume = 0;
 
+    private float bgVolume = 1f;
+    private float normalVolume = 1f;
+
     public float stopSmoothSpeed = 1f;
     public float startSmoothSpeed = 1f;
 
@@ -89,7 +92,7 @@ public class AudioManager : BaseManager
 
     public void PlayBgSound(string soundName, float volume = 1f)
     {
-        PlaySound(bgAudioSource, LoadSound(soundName), volume, true);
+        PlaySound(bgAudioSource, LoadSound(soundName), volume * normalVolume, true);
     }
 
     public void PlayBgSoundSmoothlySync(string soundName, float volume = 1f)
@@ -98,7 +101,7 @@ public class AudioManager : BaseManager
         bgAudioSource.volume = 0;
         bgAudioSource.loop = true;
         this.soundName = soundName;
-        this.maxVolume = volume;
+        this.maxVolume = volume * bgVolume;
     }
 
     private void PlayBgSoundSmooth()
@@ -123,11 +126,11 @@ public class AudioManager : BaseManager
     {
         if (audioSource == null)
         {
-            PlaySound(normalAudioSource, LoadSound(soundName), volume);
+            PlaySound(normalAudioSource, LoadSound(soundName), volume * normalVolume);
         }
         else
         {
-            PlaySound(audioSource, LoadSound(soundName), volume);
+            PlaySound(audioSource, LoadSound(soundName), volume * normalVolume);
         }
 
     }
@@ -177,6 +180,12 @@ public class AudioManager : BaseManager
         audioSource.volume = volume;
         audioSource.loop = needLoop;
         audioSource.Play();
+    }
+
+    public void SetVolume(float bgVolume, float normalVolume)
+    {
+        this.bgVolume = bgVolume;
+        this.normalVolume = normalVolume;
     }
 
     private AudioClip LoadSound(string soundName)

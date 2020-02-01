@@ -3,6 +3,11 @@
     {
       "panelTypeString": "Message",
       "path": "UIPanel/MessagePanel"
+    },
+
+    {
+      "panelTypeString": "Setting",
+      "path": "UIPanel/SettingPanel"
     }
   ]
 }
