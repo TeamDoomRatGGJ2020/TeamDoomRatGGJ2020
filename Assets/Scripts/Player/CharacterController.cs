@@ -10,6 +10,14 @@ public enum PlayerShape
     Square
 }
 
+public enum FloorMaterial
+{
+    Grass,
+    Plank,
+    FootPath,
+    Road
+}
+
 public struct ShapeButtonCondition
 {
     public bool BallButtonDown;
@@ -31,6 +39,7 @@ public class CharacterController : MonoBehaviour
     public float SquareSpeedRatio = 0.75f;
     public float NormalColliderRadius = 5f;
     public float SquatingColliderRadius = 2.5f;
+    public float WalkThres = .1f;
     #endregion
 
     #region 滞空相关 没有跳跃那就没用
@@ -62,6 +71,7 @@ public class CharacterController : MonoBehaviour
     private Animator _Animator;
     private SphereCollider _SphereCollider;
     private Animator _EyesAnimator;
+    private AudioSource _AudioSource;
 
     public PlayerShape PlayerShape = PlayerShape.Ball;
     // 保证每次检测伸缩脚之前该键已经被抬起来了 避免按住然后连续伸缩
@@ -70,6 +80,7 @@ public class CharacterController : MonoBehaviour
     private bool _ChangeToBall = false;
     private bool _ChangeToSquare = false;
 
+    private FloorMaterial _FloorMaterial = FloorMaterial.Grass;
 
     private void Awake()
     {
@@ -77,6 +88,7 @@ public class CharacterController : MonoBehaviour
         _Animator = GetComponent<Animator>();
         _SphereCollider = GetComponent<SphereCollider>();
         _EyesAnimator = GameObject.Find("Eyes").GetComponent<Animator>();
+        _AudioSource = GetComponent<AudioSource>();
 
         if (_OnLandEvent is null)
         {
@@ -86,8 +98,11 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    // 落地会发生什么
-    private void land() { }
+    // 落地会发生什么 震动苹果树？
+    private void land()
+    {
+        // TODO
+    }
 
     private ShapeButtonCondition _UpdateInput()
     {
@@ -103,7 +118,7 @@ public class CharacterController : MonoBehaviour
         bool ballButtonDown = Input.GetButton("BallMode");
         bool squareButtonDown = Input.GetButton("SquareMode");
         bool squatingButtonDown = Input.GetButton("Squat");
-        if(squatingButtonDown is false)
+        if (squatingButtonDown is false)
         {
             _SquatingKeyReset = true;
         }
@@ -126,8 +141,8 @@ public class CharacterController : MonoBehaviour
         _Animator.SetFloat("Speed", velocity);
         //_Animator.SetBool("IsBall", PlayerShape is PlayerShape.Ball);
         //_Animator.SetBool("IsSquare", PlayerShape is PlayerShape.Square);
-        _Animator.SetBool("ChangeBallTrigger",_ChangeToBall);
-        _Animator.SetBool("ChangeSquareTrigger",_ChangeToSquare);
+        _Animator.SetBool("ChangeBallTrigger", _ChangeToBall);
+        _Animator.SetBool("ChangeSquareTrigger", _ChangeToSquare);
         _ChangeToBall = false;
         _ChangeToSquare = false;
 
@@ -141,6 +156,54 @@ public class CharacterController : MonoBehaviour
         _UpdateShape(buttonCondition);
 
         _UpdateAnimation();
+
+        _UpdateWalkAudio();
+    }
+
+    public void ChangeFloorMaterial(FloorMaterial floorMaterial)
+    {
+        GameFacade.Instance.StopNormalSound(_AudioSource);
+
+        _FloorMaterial = floorMaterial;
+    }
+
+    private void _UpdateWalkAudio()
+    {
+        float velocity = new Vector3(_Rigidbody.velocity.x, 0, _Rigidbody.velocity.z).magnitude;
+        if (velocity > WalkThres)
+        {
+            if (_AudioSource.isPlaying)
+            {
+                return;
+            }
+
+            String SoundName = "";
+
+            switch (_FloorMaterial)
+            {
+                case FloorMaterial.Grass:
+                    SoundName = AudioManager.Sound_Walk_Grass;
+                    break;
+                case FloorMaterial.Plank:
+                    SoundName = AudioManager.Sound_Walk_Plank;
+                    break;
+                case FloorMaterial.FootPath:
+                    SoundName = AudioManager.Sound_Walk_Foodpath;
+                    break;
+                case FloorMaterial.Road:
+                    SoundName = AudioManager.Sound_Walk_Road;
+                    break;
+            }
+
+            GameFacade.Instance.PlayNormalSound(SoundName, _AudioSource);
+        }
+        else
+        {
+            if (_AudioSource.clip.name.Contains("走路"))
+            {
+                GameFacade.Instance.StopNormalSound(_AudioSource);
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -225,7 +288,7 @@ public class CharacterController : MonoBehaviour
     {
         //Debug.Log(_SquatingKeyReset.ToString()+" "+PlayerShape.ToString()+" "+changeToBall.ToString()+" "+changeToSquare.ToString());
 
-        changeSquat&=_SquatingKeyReset;
+        changeSquat &= _SquatingKeyReset;
 
         switch (PlayerShape)
         {
@@ -254,31 +317,44 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    private void changeSquating(){
-            _SquatingKeyReset = false;
-            _IsSquating = !_IsSquating;
+    private void changeSquating()
+    {
+        _SquatingKeyReset = false;
+        _IsSquating = !_IsSquating;
 
-            if (_IsSquating)
-            {
-                _SphereCollider.radius = SquatingColliderRadius;
+        if (_IsSquating)
+        {
+            _SphereCollider.radius = SquatingColliderRadius;
 
-                if(PlayerShape is PlayerShape.Square)
-                {
-                    knockEvent();
-                }
-            }
-            else
+            if (PlayerShape is PlayerShape.Square)
             {
-                _SphereCollider.radius = NormalColliderRadius;
+                knockEvent();
             }
+        }
+        else
+        {
+            _SphereCollider.radius = NormalColliderRadius;
+        }
     }
 
     private void knockEvent()
     {
-        //throw new NotImplementedException();
+        if (PlayerShape is PlayerShape.Square)
+        {
+            GameFacade.Instance.PlayNormalSound(AudioManager.Sound_Smash, _AudioSource);
+        }
     }
 
-    public void ShakeHead(){
+    public void ShakeHead()
+    {
         _EyesAnimator.SetTrigger("ShakeHeadTrigger");
     }
+
+    public void EatApple()
+    {
+        GameFacade.Instance.PlayNormalSound(AudioManager.Sound_EatApple, _AudioSource);
+        // TODO
+    }
+
+
 }
