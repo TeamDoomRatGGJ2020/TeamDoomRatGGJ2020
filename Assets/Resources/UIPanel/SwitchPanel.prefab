@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2632473136701208361}
   - component: {fileID: 2793677900179263748}
   - component: {fileID: 5658265952585807905}
-  - component: {fileID: 4306401494446611546}
+  - component: {fileID: 4183311905661025675}
   m_Layer: 5
   m_Name: SwitchPanel
   m_TagString: Untagged
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
---- !u!114 &4306401494446611546
+--- !u!114 &4183311905661025675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

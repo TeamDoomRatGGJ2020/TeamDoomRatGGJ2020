@@ -11,8 +11,8 @@
     },
 
     {
-      "panelTypeString": "Scene",
-      "path": "UIPanel/ScenePanel"
+      "panelTypeString": "Switch",
+      "path": "UIPanel/SwitchPanel"
     },
 
     {

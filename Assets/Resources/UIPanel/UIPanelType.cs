@@ -8,6 +8,6 @@ public enum UIPanelType
     None,
     Message,
     Setting,
-    Scene,
+    Switch,
     Start
 }

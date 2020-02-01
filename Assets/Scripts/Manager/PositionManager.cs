@@ -23,8 +23,8 @@ public class PositionManager : BaseManager
     private Transform leftAirWallTransform;
     private Transform rightAirWallTransform;
 
-    private Vector3 leftScale = new Vector3(-2, 2, 2);
-    private Vector3 rightScale = new Vector3(2, 2, 2);
+    private Vector3 leftScale = Vector3.zero;
+    private Vector3 rightScale = Vector3.zero;
 
     private Vector3 position0_R = new Vector3(12, 0, 0.4f);
     private Vector3 position1_R = new Vector3(14, 0, 0.4f);
@@ -41,6 +41,13 @@ public class PositionManager : BaseManager
         playerTransform = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         leftAirWallTransform = GameObject.Find("LeftAirWall").GetComponent<Transform>();
         rightAirWallTransform = GameObject.Find("RightAirWall").GetComponent<Transform>();
+        leftScale = playerTransform.localScale;
+        if (leftScale.x >= 0)
+        {
+            leftScale.x = 0 - leftScale.x;
+        }
+
+        rightScale = new Vector3(-leftScale.x, leftScale.y, leftScale.z);
     }
 
     public void SetPosition(int index, Position enterPosition)

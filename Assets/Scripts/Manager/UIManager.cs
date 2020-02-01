@@ -158,6 +158,6 @@ public class UIManager : BaseManager
 
     public void ShowSwitch()
     {
-        PushPanel(UIPanelType.Scene);
+        PushPanel(UIPanelType.Switch);
     }
 }
