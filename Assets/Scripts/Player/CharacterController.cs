@@ -79,7 +79,7 @@ public class CharacterController : MonoBehaviour
     private bool _IsSquating = false;
     private bool _ChangeToBall = false;
     private bool _ChangeToSquare = false;
-    private bool _Movable = true;
+    private bool _Movable = false;
 
     public PlayerShape PlayerShape{
         get{

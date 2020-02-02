@@ -29,7 +29,7 @@ AnimationClip:
       value: {fileID: 21300000, guid: 2f2bdd8cd9d7d4697b88814da0dd70c3, type: 3}
     - time: 5.52
       value: {fileID: 21300000, guid: a65d1cf74fe91428abc8d24e3a3857f0, type: 3}
-    - time: 7.16
+    - time: 7.72
       value: {fileID: 21300000, guid: a65d1cf74fe91428abc8d24e3a3857f0, type: 3}
     attribute: m_Sprite
     path: 
@@ -61,7 +61,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 7.2
+    m_StopTime: 7.7599998
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -84,7 +84,8 @@ AnimationClip:
   - time: 7.16
     functionName: QuarrelFinish
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 11500000, guid: 5a7632e7c3ae94061954a8a54903f2da,
+      type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

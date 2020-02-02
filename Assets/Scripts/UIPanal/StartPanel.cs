@@ -14,6 +14,8 @@ public class StartPanel : BasePanel
 
     private bool isNeedEffect = false;
 
+    public Quarrel quarrel;
+
     public override void OnEnter()
     {
         base.OnEnter(); 
@@ -41,6 +43,14 @@ public class StartPanel : BasePanel
         quitButton.transform.DOLocalMoveX(2000, 0.5f);
         startButton.transform.DOScale(0, 0.5f);
         quitButton.transform.DOScale(0, 0.5f);
+
+        StartQuarrel();
+    }
+
+    private void StartQuarrel(){
+        var quarrelObject = GameObject.Find("Quarrel");
+        quarrel = quarrelObject.GetComponent<Quarrel>();
+        quarrel.enabled = true;
     }
 
     private void MovieEffect()

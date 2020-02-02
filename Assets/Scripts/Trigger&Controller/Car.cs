@@ -8,7 +8,7 @@ public class Car : MonoBehaviour
     public Transform Origination;
     // public Transform Destination{set{_Destination = value;}}
     public Transform Destination;
-    public float DriveTime = 5f;
+    public float DriveTime = 6f;
     private float _PastTime = 0f;
     public float PitchRange;
     public string CarSpriteUrlBase = "Elements/Car";
@@ -62,10 +62,10 @@ public class Car : MonoBehaviour
         transform.position = Vector3.Lerp(Origination.position,Destination.position,_PastTime/DriveTime);
         transform.localScale = Vector3.Lerp(Origination.localScale,Destination.localScale,_PastTime/DriveTime);
 
-        Debug.Log(transform.localScale);
-
         if (IsFirstCar)
         {
+            _PastTime = 0f;
+            gameObject.SetActive(false);
             Destroy(gameObject);
             return;
         }
