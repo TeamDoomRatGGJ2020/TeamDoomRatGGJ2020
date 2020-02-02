@@ -26,10 +26,31 @@ public class PlayerTrigger : MonoBehaviour
     private Position enterPosition = Position.Null;
     private int index;
 
+    private bool canTalk = false;
+
     void Start()
     {
         facade = GameFacade.Instance;
         DOTween.To(() => timeCount, a => timeCount = a, 1, 0.1f).OnComplete(() => index = facade.GetPresentIndex());
+    }
+
+    void Update()
+    {
+        if (canTalk)
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                facade.OnCarpenterTalk();
+                transform.Find("Talk").GetComponent<Animator>().SetTrigger("Talk");
+                facade.ChangeMovable(false);
+                canTalk = false;
+                DOTween.To(() => timeCount, a => timeCount = a, 1, 7).OnComplete(delegate()
+                {
+                    facade.ChangeMovable(true);
+                    canTalk = true;
+                });
+            }
+        }
     }
 
     void OnTriggerEnter(Collider collision)
@@ -40,12 +61,10 @@ public class PlayerTrigger : MonoBehaviour
         }
         else if (collision.tag == "Mission")
         {
-            print(collision.name);
             OnMission(collision);
         }
         else if (collision.tag == "Audio")
         {
-            print(collision.name);
             OnSwitchAudio(collision);
         }
     }
@@ -116,7 +135,12 @@ public class PlayerTrigger : MonoBehaviour
         {
             //回忆1
             case 0:
-                //TODO
+                if (MissionIndex == -1)
+                {
+                    facade.OnRecall(1, "J");
+                    facade.SetRotation(Position.Left);
+                    MissionIndex = 0;
+                }
                 break;
             //马路
             case 2:
@@ -149,7 +173,19 @@ public class PlayerTrigger : MonoBehaviour
             //主角处于触发器范围内依旧可以拿起
             //去了断桥之后主角会询问木板和钉子 完成任务之后直接把木板和钉子顶在头上
             case 6:
-                //TODO
+                if (MissionIndex == 4)
+                {
+
+                }
+                else if (MissionIndex < 4)
+                {
+                    canTalk = true;
+                    facade.ShowMessage("F");
+                }
+                else
+                {
+
+                }
                 break;
             //断桥
             case 8:
@@ -157,7 +193,12 @@ public class PlayerTrigger : MonoBehaviour
                 break;
             //回忆2
             case 10:
-                //TODO
+                if (MissionIndex == 2)
+                {
+                    facade.OnRecall(2, "K→□ L→⚪");
+                    facade.SetRotation(Position.Right);
+                    MissionIndex = 3;
+                }
                 break;
             //给木匠苹果的任务
             //如果在开启木匠任务之前使用方块砸地把苹果砸下来 苹果掉在地上 玩家按拾取键 苹果消失 播放吃苹果的音效

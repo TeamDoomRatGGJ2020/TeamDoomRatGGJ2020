@@ -14,10 +14,6 @@ public enum Position
 
 public class PositionManager : BaseManager
 {
-    //TODO
-    //暂时尚未做上与下边界的切换场景
-    //建议：玩家移动的位置可以进行一些修改
-    //      我测试了一下，发现之前的位置会冲出空气墙（没大明白Near和Far的空气墙是咋运作的hh，尝试了下初始位置的z发现0.4貌似不会出去，但不确定
     public PositionManager(GameFacade facade) : base(facade) { }
 
     private Transform playerTransform;
@@ -103,6 +99,19 @@ public class PositionManager : BaseManager
         SetAirWallPosition(pd);
     }
 
+    public void SetRotation(Position position)
+    {
+        if (position == Position.Left)
+        {
+            playerTransform.localScale = leftScale;
+        }
+
+        if (position == Position.Right)
+        {
+            playerTransform.localScale = rightScale;
+        }
+    }
+
     private void SetAirWallPosition(PositionData pd)
     {
         leftAirWallTransform.localPosition = pd.LeftAirWallPosition;
@@ -151,11 +160,11 @@ public class PositionManager : BaseManager
         positionDataDict.Add(7,
             new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -7.5f),
                 new Vector3(0, 0, 0.8f), 7, new Vector3(-11.5f, 0, -3.55f),
-                new Vector3(10.8f, 0, -4.5f), Vector3.zero, Vector3.zero));
+                new Vector3(10.8f, 0, -4.5f), Vector3.zero, new Vector3(-1.37f, 0, -3.15f)));
 
         positionDataDict.Add(8,
-            new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -7.5f),
-                new Vector3(0, 0, 0.8f), 8, new Vector3(-15.3f, 0, -3.1f),
+            new PositionData(new Vector3(-17.8f, 0, 0), new Vector3(0, 0, -3.5f),
+                new Vector3(0, 0, 2.17f), 8, new Vector3(-13.5f, 0, 0),
                 new Vector3(15.5f, 0, -0.3f), Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(10,
@@ -165,7 +174,7 @@ public class PositionManager : BaseManager
 
         positionDataDict.Add(11,
             new PositionData(new Vector3(-21f, 0, 0), new Vector3(0, 0, -7.5f),
-                new Vector3(0, 0, 0.8f), 11, new Vector3(-15.3f, 0, 0.32f),
+                new Vector3(0, 0, 0.8f), 11, new Vector3(-14.83f, 0, -0.88f),
                 Vector3.zero, Vector3.zero, Vector3.zero));
     }
 }

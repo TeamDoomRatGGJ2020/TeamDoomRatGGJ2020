@@ -20,6 +20,11 @@ public class GameFacade : MonoBehaviour
     private UIManager uiManager;
     private SceneManager sceneManager;
     private PositionManager positionManager;
+    private RecallManager recallManager;
+    private TalkManager talkManager;
+    private HeadManager headManager;
+
+    public CharacterController cc;
 
     private float timeCount;
 
@@ -57,15 +62,23 @@ public class GameFacade : MonoBehaviour
 
     private void Init()
     {
+        cc = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
+
         audioManager = new AudioManager(this);
         uiManager = new UIManager(this);
         sceneManager = new SceneManager(this);
         positionManager = new PositionManager(this);
+        recallManager = new RecallManager(this);
+        talkManager = new TalkManager(this);
+        headManager = new HeadManager(this);
 
         audioManager.OnInit();
         uiManager.OnInit();
         sceneManager.OnInit();
         positionManager.OnInit();
+        recallManager.OnInit();
+        talkManager.OnInit();
+        headManager.OnInit();
     }
 
     private void UpdateManager()
@@ -74,6 +87,9 @@ public class GameFacade : MonoBehaviour
         uiManager.Update();
         sceneManager.Update();
         positionManager.Update();
+        recallManager.Update();
+        talkManager.Update();
+        headManager.Update();
     }
 
     private void OnDestroy()
@@ -82,6 +98,9 @@ public class GameFacade : MonoBehaviour
         uiManager.OnDestroy();
         sceneManager.OnDestroy();
         positionManager.OnDestroy();
+        recallManager.OnDestroy();
+        talkManager.OnDestroy();
+        headManager.OnDestroy();
     }
 
     #region Audio内容
@@ -198,6 +217,11 @@ public class GameFacade : MonoBehaviour
         return sceneManager.GetPresentIndex();
     }
 
+    public GameObject GetPresentGO()
+    {
+        return sceneManager.GetPresentGO();
+    }
+
     #endregion
 
     #region Position内容
@@ -212,5 +236,54 @@ public class GameFacade : MonoBehaviour
         positionManager.SetPosition(index, enterPosition);
     }
 
+    public void SetRotation(Position position)
+    {
+        positionManager.SetRotation(position);
+    }
+    #endregion
+
+    #region Recall内容
+
+    public void OnRecall(int recallIndex, string hint = null)
+    {
+        recallManager.OnRecall(recallIndex, hint);
+    }
+
+    #endregion
+
+    #region Talk内容
+
+    public void OnCarpenterTalk()
+    {
+        talkManager.OnCarpenterTalk();
+    }
+
+    #endregion
+
+    #region CC内容
+
+    public void ChangeMovable(bool canMove)
+    {
+        cc.ChangeMovable(canMove);
+    }
+
+    #endregion
+
+    #region Head内容
+
+    public void PickUpPlank()
+    {
+        headManager.PickUpPlank();
+    }
+
+    public void PickUpApple()
+    {
+        headManager.PickUpApple();
+    }
+
+    public void Throw()
+    {
+        headManager.Throw();
+    }
     #endregion
 }
