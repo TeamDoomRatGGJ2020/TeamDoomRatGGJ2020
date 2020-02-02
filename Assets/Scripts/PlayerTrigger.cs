@@ -263,20 +263,21 @@ public class PlayerTrigger : MonoBehaviour
                     canTalk = true;
                     facade.ShowMessage("F");
                 }
-                else
-                {
-
-                }
                 break;
             //断桥
             case 8:
-                //TODO
+                if (MissionIndex == 5)
+                {
+                    facade.GetPresentGO().transform.Find("Anim").gameObject.SetActive(true);
+                    facade.PlayBgSound(AudioManager.Sound_Recall);
+                    //TODO
+                }
                 break;
             //回忆2
             case 10:
-                if (MissionIndex == 2)
+                if (MissionIndex <= 2)
                 {
-                    facade.OnRecall(2, "K→□ L→⚪");
+                    facade.OnRecall(2, "K→□ L→O");
                     facade.SetRotation(Position.Right);
                     MissionIndex = 3;
                 }
