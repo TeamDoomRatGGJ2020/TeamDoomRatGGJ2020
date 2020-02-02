@@ -224,6 +224,11 @@ public class GameFacade : MonoBehaviour
         return sceneManager.GetPresentGO();
     }
 
+    public bool HasAppleFall()
+    {
+        return cc.GetComponent<PlayerTrigger>().GetAppleFall();
+    }
+
     #endregion
 
     #region Position内容

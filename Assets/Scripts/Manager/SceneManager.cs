@@ -59,6 +59,14 @@ public class SceneManager : BaseManager
                 sr.sprite = Resources.Load<Sprite>("Elements/木板");
             }
         }
+        else if (index == 11)
+        {
+            SpriteRenderer sr = bgGO.GetComponent<SpriteRenderer>();
+            if (facade.HasAppleFall())
+            {
+                sr.sprite = Resources.Load<Sprite>("Backgrounds/1-场景11-野外小路-苹果落地");
+            }
+        }
         this.index = index;
     }
 

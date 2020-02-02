@@ -19,11 +19,15 @@ public class HeadManager : BaseManager
         sr = facade.cc.transform.Find("Head").GetComponent<SpriteRenderer>();
 
         plankSprite = Resources.Load<Sprite>("Elements/木板");
-        //TODO Apple
+        appleSprite = Resources.Load<Sprite>("Elements/苹果");
     }
 
     public void PickUpPlank()
     {
+        if (hasThing)
+        {
+            return;
+        }
         sr.sprite = plankSprite;
         hasThing = true;
     }
@@ -36,6 +40,10 @@ public class HeadManager : BaseManager
 
     public void PickUpApple()
     {
+        if (hasThing)
+        {
+            return;
+        }
         sr.sprite = appleSprite;
         hasThing = true;
     }
