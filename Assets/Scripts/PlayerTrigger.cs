@@ -270,7 +270,10 @@ public class PlayerTrigger : MonoBehaviour
                 {
                     facade.GetPresentGO().transform.Find("Anim").gameObject.SetActive(true);
                     facade.PlayBgSound(AudioManager.Sound_Recall);
-                    //TODO
+                    transform.Find("PlayerSprite").gameObject.SetActive(false);
+                    facade.ChangeMovable(false);
+                    GetComponent<SphereCollider>().enabled = false;
+                    GetComponent<Animator>().SetTrigger("End");
                 }
                 break;
             //回忆2
