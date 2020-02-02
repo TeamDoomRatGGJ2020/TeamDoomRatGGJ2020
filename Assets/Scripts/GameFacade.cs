@@ -72,8 +72,6 @@ public class GameFacade : MonoBehaviour
         talkManager = new TalkManager(this);
         headManager = new HeadManager(this);
 
-        cc.ChangeMovable(true);
-
         audioManager.OnInit();
         uiManager.OnInit();
         sceneManager.OnInit();
