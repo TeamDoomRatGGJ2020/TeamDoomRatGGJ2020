@@ -270,16 +270,12 @@ public class PlayerTrigger : MonoBehaviour
                 break;
             //断桥
             case 8:
-<<<<<<< HEAD
                 if (MissionIndex == 5)
                 {
                     facade.GetPresentGO().transform.Find("Anim").gameObject.SetActive(true);
-                    facade.PlayBgSound(AudioManager.Sound_Recall);
+                    //facade.PlayBgSound(AudioManager.Sound_Recall);
                     //TODO
                 }
-=======
-                //TODO
->>>>>>> parent of d3f92b2... AddRepairBridge
                 break;
             //回忆2
             case 10:
