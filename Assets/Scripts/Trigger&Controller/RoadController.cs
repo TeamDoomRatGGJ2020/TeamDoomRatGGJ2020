@@ -36,6 +36,7 @@ public class RoadController : MonoBehaviour
     public float CarPitchRange = 2f;
     public Transform SpawnIndicator;
     public Transform DestinationIndicator;
+    public Transform OutSpace;
     public bool FirstCarPast = false;
     #endregion
 
@@ -113,7 +114,7 @@ public class RoadController : MonoBehaviour
             return;
         }
 
-        if (/*memory.played() == false*/false || _CharacterController.PlayerShape != PlayerShape.Ball || _CharacterController.IsSquating != false)
+        if (_CharacterController.HaveLearnedSquat is false || _CharacterController.PlayerShape != PlayerShape.Ball || _CharacterController.IsSquating != false)
         {
             _Refuse();
         }
@@ -189,7 +190,7 @@ public class RoadController : MonoBehaviour
         }
 
         GameObject obj = (GameObject)Resources.Load("Elements/Car");
-        Instantiate(obj, GameObject.Find("OutSpace").transform);
+        Instantiate(obj, OutSpace);
 
         Car car = obj.GetComponent<Car>();
         car.Origination = SpawnIndicator.transform;

@@ -81,6 +81,20 @@ public class CharacterController : MonoBehaviour
     private bool _ChangeToSquare = false;
     private bool _Movable = false;
 
+    public bool HaveLearnedChangeShape = false;
+    public bool HaveLearnedSquat = false;
+
+    public Transform CameraFocus;
+    public float CameraFocusOffset = 0;
+
+    
+    public void SetFocusOffset(float offset){
+        CameraFocusOffset = offset;
+    }
+    public void ResetFocus(){
+        CameraFocusOffset = 0;
+    }
+
     public PlayerShape PlayerShape{
         get{
             return _PlayerShape;
@@ -163,6 +177,8 @@ public class CharacterController : MonoBehaviour
 
     private void Update()
     {
+        CameraFocus.position = transform.position + new Vector3(CameraFocusOffset,0,0);
+
         var buttonCondition = _UpdateInput();
 
         _UpdateShape(buttonCondition);
@@ -353,28 +369,31 @@ public class CharacterController : MonoBehaviour
 
         changeSquat &= _SquatingKeyReset;
 
-        switch (_PlayerShape)
-        {
-            case PlayerShape.Ball:
-                if (changeToBall is false && changeToSquare is true)
-                {
-                    _PlayerShape = PlayerShape.Square;
-                    _ChangeToSquare = true;
-                    changeSquat = (_IsSquating);
-                }
-                break;
-            case PlayerShape.Square:
-                if (changeToSquare is false && changeToBall is true)
-                {
-                    _PlayerShape = PlayerShape.Ball;
-                    _ChangeToBall = true;
-                    changeSquat = (_IsSquating);
-                }
-                break;
+
+        if(HaveLearnedChangeShape){
+            switch (_PlayerShape)
+            {
+                case PlayerShape.Ball:
+                    if (changeToBall is false && changeToSquare is true)
+                    {
+                        _PlayerShape = PlayerShape.Square;
+                        _ChangeToSquare = true;
+                        changeSquat = (_IsSquating);
+                    }
+                    break;
+                case PlayerShape.Square:
+                    if (changeToSquare is false && changeToBall is true)
+                    {
+                        _PlayerShape = PlayerShape.Ball;
+                        _ChangeToBall = true;
+                        changeSquat = (_IsSquating);
+                    }
+                    break;
+            }
         }
 
         // 处理缩脚
-        if (changeSquat)
+        if (changeSquat&&HaveLearnedSquat)
         {
             changeSquating();
         }

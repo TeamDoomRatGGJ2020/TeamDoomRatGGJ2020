@@ -270,6 +270,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2319826920671237240, guid: d996df0229c15c644bf05b81846ce547,
+        type: 3}
+      propertyPath: CameraFocus
+      value: 
+      objectReference: {fileID: 869640196}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d996df0229c15c644bf05b81846ce547, type: 3}
 --- !u!1 &87275782
@@ -911,8 +916,8 @@ MonoBehaviour:
   m_StreamingVersion: 20170927
   m_Priority: 10
   m_StandbyUpdate: 2
-  m_LookAt: {fileID: 675060379}
-  m_Follow: {fileID: 675060379}
+  m_LookAt: {fileID: 869640196}
+  m_Follow: {fileID: 869640196}
   m_Lens:
     FieldOfView: 60
     OrthographicSize: 5
@@ -1053,6 +1058,10 @@ MonoBehaviour:
     m_Bits: 256
   GroundCheck: {fileID: 1403919123}
   Speed: {x: 3, y: 3}
+  HaveLearnedChangeShape: 0
+  HaveLearnedSquat: 0
+  CameraFocus: {fileID: 0}
+  CameraFocusOffset: 0
 --- !u!95 &799451425
 Animator:
   serializedVersion: 3
@@ -1315,6 +1324,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &869640195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 869640196}
+  m_Layer: 0
+  m_Name: CameraFocus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &869640196
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 869640195}
+  m_LocalRotation: {x: 0.2588191, y: -0, z: -0, w: 0.9659258}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.24, y: 0.24, z: 0.24}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 21
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &925506924
 GameObject:
   m_ObjectHideFlags: 0
@@ -2342,7 +2381,9 @@ MonoBehaviour:
   CarPitchRange: 2
   SpawnIndicator: {fileID: 0}
   DestinationIndicator: {fileID: 0}
+  OutSpace: {fileID: 0}
   FirstCarPast: 0
+  cars: []
 --- !u!65 &2001524859
 BoxCollider:
   m_ObjectHideFlags: 0

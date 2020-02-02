@@ -83,6 +83,10 @@ public class PlayerTrigger : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.J))
             {
+                if(facade.cc.PlayerShape != PlayerShape.Square){
+                    return;
+                }
+
                 GameObject go = facade.GetPresentGO();
                 GameObject apple = GameObject.Instantiate(Resources.Load<GameObject>("Elements/AppleSpawn"));
                 apple.transform.SetParent(go.transform);
@@ -204,6 +208,7 @@ public class PlayerTrigger : MonoBehaviour
                     facade.OnRecall(1, "J");
                     facade.SetRotation(Position.Left);
                     MissionIndex = 0;
+                    facade.cc.HaveLearnedSquat = true;
                 }
                 break;
             //马路
@@ -279,6 +284,7 @@ public class PlayerTrigger : MonoBehaviour
                     facade.OnRecall(2, "K→□ L→⚪");
                     facade.SetRotation(Position.Right);
                     MissionIndex = 3;
+                    facade.cc.HaveLearnedChangeShape = true;
                 }
                 break;
             //给木匠苹果的任务

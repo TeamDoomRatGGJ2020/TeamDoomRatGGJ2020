@@ -79,6 +79,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1173983109412812340
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4687607387694727874}
+  m_Layer: 0
+  m_Name: CameraFocus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4687607387694727874
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1173983109412812340}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 2319826920671237188}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2319826920301752448
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,6 +247,7 @@ Transform:
   - {fileID: 2319826921945818699}
   - {fileID: 2319826920301752449}
   - {fileID: 1211009615}
+  - {fileID: 4687607387694727874}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 30, y: 0, z: 0}
@@ -245,7 +276,10 @@ MonoBehaviour:
     m_Bits: 256
   GroundCheck: {fileID: 2319826921945818699}
   Speed: {x: 3, y: 3}
-  PlayerShape: 0
+  HaveLearnedChangeShape: 0
+  HaveLearnedSquat: 0
+  CameraFocus: {fileID: 4687607387694727874}
+  CameraFocusOffset: 0
 --- !u!54 &2319826920671237190
 Rigidbody:
   m_ObjectHideFlags: 0
