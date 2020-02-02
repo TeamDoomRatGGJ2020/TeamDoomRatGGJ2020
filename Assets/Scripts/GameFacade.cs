@@ -22,6 +22,7 @@ public class GameFacade : MonoBehaviour
     private PositionManager positionManager;
     private RecallManager recallManager;
     private TalkManager talkManager;
+    private HeadManager headManager;
 
     public CharacterController cc;
 
@@ -61,14 +62,15 @@ public class GameFacade : MonoBehaviour
 
     private void Init()
     {
+        cc = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
+
         audioManager = new AudioManager(this);
         uiManager = new UIManager(this);
         sceneManager = new SceneManager(this);
         positionManager = new PositionManager(this);
         recallManager = new RecallManager(this);
         talkManager = new TalkManager(this);
-
-        cc = GameObject.FindGameObjectWithTag("Player").GetComponent<CharacterController>();
+        headManager = new HeadManager(this);
 
         audioManager.OnInit();
         uiManager.OnInit();
@@ -76,6 +78,7 @@ public class GameFacade : MonoBehaviour
         positionManager.OnInit();
         recallManager.OnInit();
         talkManager.OnInit();
+        headManager.OnInit();
     }
 
     private void UpdateManager()
@@ -86,6 +89,7 @@ public class GameFacade : MonoBehaviour
         positionManager.Update();
         recallManager.Update();
         talkManager.Update();
+        headManager.Update();
     }
 
     private void OnDestroy()
@@ -96,6 +100,7 @@ public class GameFacade : MonoBehaviour
         positionManager.OnDestroy();
         recallManager.OnDestroy();
         talkManager.OnDestroy();
+        headManager.OnDestroy();
     }
 
     #region Audio内容
@@ -262,5 +267,23 @@ public class GameFacade : MonoBehaviour
         cc.ChangeMovable(canMove);
     }
 
+    #endregion
+
+    #region Head内容
+
+    public void PickUpPlank()
+    {
+        headManager.PickUpPlank();
+    }
+
+    public void PickUpApple()
+    {
+        headManager.PickUpApple();
+    }
+
+    public void Throw()
+    {
+        headManager.Throw();
+    }
     #endregion
 }

@@ -173,8 +173,19 @@ public class PlayerTrigger : MonoBehaviour
             //主角处于触发器范围内依旧可以拿起
             //去了断桥之后主角会询问木板和钉子 完成任务之后直接把木板和钉子顶在头上
             case 6:
-                canTalk = true;
-                facade.ShowMessage("F");
+                if (MissionIndex == 4)
+                {
+
+                }
+                else if (MissionIndex < 4)
+                {
+                    canTalk = true;
+                    facade.ShowMessage("F");
+                }
+                else
+                {
+
+                }
                 break;
             //断桥
             case 8:
