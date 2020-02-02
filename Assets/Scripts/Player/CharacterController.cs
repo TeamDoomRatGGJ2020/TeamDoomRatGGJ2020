@@ -223,6 +223,10 @@ public class CharacterController : MonoBehaviour
                     break;
             }
 
+            if(_IsSquating is true){
+                SoundName = AudioManager.Sound_Roll;
+            }
+
             GameFacade.Instance.PlayNormalSound(SoundName, _AudioSource);
         }
         else

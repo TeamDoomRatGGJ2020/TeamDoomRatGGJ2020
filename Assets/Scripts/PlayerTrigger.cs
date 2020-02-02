@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using UnityEditor.Experimental.UIElements.GraphView;
+//using UnityEditor.Experimental.UIElements.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -67,7 +67,10 @@ public class PlayerTrigger : MonoBehaviour
                 MissionIndex = 1;
             }
         }
+    }
 
+    private void LateUpdate()
+    {
         if (appleCanFall)
         {
             if (hasFall)
@@ -83,7 +86,8 @@ public class PlayerTrigger : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.J))
             {
-                if(facade.cc.PlayerShape != PlayerShape.Square){
+                if (facade.cc.PlayerShape != PlayerShape.Square||facade.cc.IsSquating is false)
+                {
                     return;
                 }
 
@@ -241,6 +245,10 @@ public class PlayerTrigger : MonoBehaviour
                 if (MissionIndex == 1)
                 {
                     GameObject go = facade.GetPresentGO();
+
+                    var bound = go.GetComponent<RepairBridgeController>();
+                    bound.Boom();
+
                     SpriteRenderer plank = go.transform.Find("Plank").GetComponent<SpriteRenderer>();
                     plank.sprite = Resources.Load<Sprite>("Elements/木板");
                     facade.Throw();
@@ -268,20 +276,35 @@ public class PlayerTrigger : MonoBehaviour
                     canTalk = true;
                     facade.ShowMessage("F");
                 }
-                else
-                {
-
-                }
                 break;
             //断桥
             case 8:
-                //TODO
+                if (MissionIndex == 5)
+                {
+                    facade.GetPresentGO().transform.Find("Anim").gameObject.SetActive(true);
+                    facade.PlayBgSound(AudioManager.Sound_Recall);
+
+                    var cc = GameFacade.Instance.cc;
+                    //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
+                    cc.SetFocusOffset(9);
+
+                    DOTween.To(() => timeCount, a => timeCount = a, 1, 14).OnComplete(delegate ()
+                    {
+                        Application.Quit();
+
+                        facade.PlayBgSoundSmoothlySync(AudioManager.Sound_BGM);
+
+                        var cc1 = GameFacade.Instance.cc;
+                        //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
+                        cc1.ResetFocus();
+                    });
+                }
                 break;
             //回忆2
             case 10:
-                if (MissionIndex == 2)
+                if (MissionIndex <= 2)
                 {
-                    facade.OnRecall(2, "K→□ L→⚪");
+                    facade.OnRecall(2, "K→□ L→O");
                     facade.SetRotation(Position.Right);
                     MissionIndex = 3;
                     facade.cc.HaveLearnedChangeShape = true;

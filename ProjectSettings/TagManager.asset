@@ -9,6 +9,7 @@ TagManager:
   - Mission
   - Audio
   - Element
+  - BridgeBound
   layers:
   - Default
   - TransparentFX

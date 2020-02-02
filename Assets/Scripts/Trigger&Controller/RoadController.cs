@@ -59,8 +59,9 @@ public class RoadController : MonoBehaviour
 
     private void Update()
     {
-        if (_State is CrossRoadStateEnum.WaitForChangeShape && Input.GetButtonDown("Squat"))
+        if (_State is CrossRoadStateEnum.WaitForChangeShape)
         {
+            _CharacterController.MandatorySquat();
             _WaitOK();
         }
         else
@@ -114,7 +115,7 @@ public class RoadController : MonoBehaviour
             return;
         }
 
-        if (_CharacterController.HaveLearnedSquat is false || _CharacterController.PlayerShape != PlayerShape.Ball || _CharacterController.IsSquating != false)
+        if (_CharacterController.HaveLearnedSquat is false)
         {
             _Refuse();
         }
@@ -159,7 +160,7 @@ public class RoadController : MonoBehaviour
         _CharacterController.ChangeMovable(true);
         _ShouldSpawnCar = true;
         Used = true;
-        CrossRoadBound.GetComponent<MeshCollider>().enabled = true;
+        CrossRoadBound.transform.localScale = new Vector3(1,1,100);
     }
 
     private void _WaitOK()
