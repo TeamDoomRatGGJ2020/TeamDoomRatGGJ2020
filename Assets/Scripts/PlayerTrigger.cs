@@ -263,9 +263,14 @@ public class PlayerTrigger : MonoBehaviour
                     canTalk = true;
                     facade.ShowMessage("F");
                 }
+                else
+                {
+
+                }
                 break;
             //断桥
             case 8:
+<<<<<<< HEAD
                 if (MissionIndex == 5)
                 {
                     facade.GetPresentGO().transform.Find("Anim").gameObject.SetActive(true);
@@ -275,12 +280,15 @@ public class PlayerTrigger : MonoBehaviour
                     GetComponent<SphereCollider>().enabled = false;
                     GetComponent<Animator>().SetTrigger("End");
                 }
+=======
+                //TODO
+>>>>>>> parent of d3f92b2... AddRepairBridge
                 break;
             //回忆2
             case 10:
-                if (MissionIndex <= 2)
+                if (MissionIndex == 2)
                 {
-                    facade.OnRecall(2, "K→□ L→O");
+                    facade.OnRecall(2, "K→□ L→⚪");
                     facade.SetRotation(Position.Right);
                     MissionIndex = 3;
                 }
