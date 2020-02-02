@@ -16,7 +16,7 @@ public class SceneManager : BaseManager
     private int maxIndex = 11;
     private Dictionary<int, GameObject> sceneDic = new Dictionary<int, GameObject>();
 
-    private GameObject bgGO = null;
+    public GameObject bgGO = null;
     
     public override void OnInit()
     {
@@ -57,6 +57,11 @@ public class SceneManager : BaseManager
     public int GetPresentIndex()
     {
         return index;
+    }
+
+    public GameObject GetPresentGO()
+    {
+        return bgGO;
     }
 
     private GameObject LoadScene(string sceneName)
