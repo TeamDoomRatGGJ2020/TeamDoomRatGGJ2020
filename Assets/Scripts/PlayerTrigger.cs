@@ -27,6 +27,9 @@ public class PlayerTrigger : MonoBehaviour
     private int index;
 
     private bool canTalk = false;
+    private bool canTake_bg03 = false;
+    private bool appleCanFall = false;
+    private bool hasFall = false;
 
     void Start()
     {
@@ -51,6 +54,50 @@ public class PlayerTrigger : MonoBehaviour
                 });
             }
         }
+
+        if (canTake_bg03)
+        {
+            GameObject go = facade.GetPresentGO();
+            SpriteRenderer plank = go.transform.Find("Plank").GetComponent<SpriteRenderer>();
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                plank.sprite = null;
+                facade.PickUpPlank();
+                canTake_bg03 = false;
+                MissionIndex = 1;
+            }
+        }
+
+        if (appleCanFall)
+        {
+            if (hasFall)
+            {
+                if (Input.GetKeyDown(KeyCode.F))
+                {
+                    facade.PickUpApple();
+                    if (MissionIndex <= 3)
+                    {
+                        MissionIndex = 4;
+                    }
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.J))
+            {
+                GameObject go = facade.GetPresentGO();
+                GameObject apple = GameObject.Instantiate(Resources.Load<GameObject>("Elements/AppleSpawn"));
+                apple.transform.SetParent(go.transform);
+                if (hasFall == false)
+                {
+                    hasFall = true;
+                }
+                else
+                {
+                    DOTween.To(() => timeCount, a => timeCount = a, 1, 2.5f)
+                        .OnComplete(() => GameObject.Destroy(apple));
+                }
+            }
+            print(hasFall);
+        }
     }
 
     void OnTriggerEnter(Collider collision)
@@ -66,6 +113,21 @@ public class PlayerTrigger : MonoBehaviour
         else if (collision.tag == "Audio")
         {
             OnSwitchAudio(collision);
+        }
+    }
+
+    void OnTriggerExit(Collider collision)
+    {
+        if (collision.tag == "Mission")
+        {
+            if (facade.GetPresentIndex() == 11)
+            {
+                appleCanFall = false;
+            }
+            else if (facade.GetPresentIndex() == 6)
+            {
+                canTalk = false;
+            }
         }
     }
 
@@ -112,15 +174,17 @@ public class PlayerTrigger : MonoBehaviour
             switch (name)
             {
                 case "RightEdge":
+                    if (index == 11)
+                    {
+                        index = 7;
+                    }
+                    enterPosition = Position.Down;
+                    facade.SwitchScene(index, enterPosition);
                     break;
                 case "LeftEdge":
                     if (index == 10)
                     {
                         index = 5;
-                    }
-                    else if (index == 11)
-                    {
-                        index = 7;
                     }
                     enterPosition = Position.Down;
                     facade.SwitchScene(index, enterPosition);
@@ -160,12 +224,27 @@ public class PlayerTrigger : MonoBehaviour
             //有木板的小路
             //木板只有一块
             case 3:
-                //TODO
+                if (MissionIndex <= 0)
+                {
+                    facade.ShowMessage("F");
+                    canTake_bg03 = true;
+                }
                 break;
             //开裂的小路
             //捡到木板之后搭上去
             case 4:
-                //TODO
+                if (MissionIndex == 1)
+                {
+                    GameObject go = facade.GetPresentGO();
+                    SpriteRenderer plank = go.transform.Find("Plank").GetComponent<SpriteRenderer>();
+                    plank.sprite = Resources.Load<Sprite>("Elements/木板");
+                    facade.Throw();
+                    MissionIndex = 2;
+                }
+                else if (MissionIndex < 1)
+                {
+                    //TODO 播放拒绝动画
+                }
                 break;
             //木匠小屋
             //在木匠身边有小对话气泡 按对话键开始对话 第一次开始对话开启任务（内容如大纲
@@ -175,7 +254,9 @@ public class PlayerTrigger : MonoBehaviour
             case 6:
                 if (MissionIndex == 4)
                 {
-
+                    facade.Throw();
+                    facade.PickUpPlank();
+                    MissionIndex = 5;
                 }
                 else if (MissionIndex < 4)
                 {
@@ -205,7 +286,8 @@ public class PlayerTrigger : MonoBehaviour
             //开启木匠任务之后 玩家按拾取键 直接把苹果顶在头上
             //完成任务之后同开启任务之前
             case 11:
-                //TODO
+                appleCanFall = true;
+                facade.ShowMessage("□→J");
                 break;
         }
     }
@@ -230,5 +312,15 @@ public class PlayerTrigger : MonoBehaviour
                 //TODO
                 break;
         }
+    }
+
+    public int GetMissionIndex()
+    {
+        return MissionIndex;
+    }
+
+    public bool GetAppleFall()
+    {
+        return hasFall;
     }
 }

@@ -348,7 +348,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1001 &299072276
+--- !u!1001 &126057999
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2

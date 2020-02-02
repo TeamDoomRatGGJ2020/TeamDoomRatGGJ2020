@@ -86,14 +86,17 @@ public class PositionManager : BaseManager
                         break;
                     case Position.Down:
                         playerTransform.localPosition = pd.DownEnterPosition;
-                        playerTransform.localScale = leftScale;
+                        playerTransform.localScale = rightScale;
                         break;
                 }
                 break;
             case 10:
-            case 11:
                 playerTransform.localPosition = pd.LeftEnterPosition;
                 playerTransform.localScale = rightScale;
+                break;
+            case 11:
+                playerTransform.localPosition = pd.RightEnterPosition;
+                playerTransform.localScale = leftScale;
                 break;
         }
         SetAirWallPosition(pd);
@@ -173,8 +176,8 @@ public class PositionManager : BaseManager
                 Vector3.zero,Vector3.zero, Vector3.zero));
 
         positionDataDict.Add(11,
-            new PositionData(new Vector3(-21f, 0, 0), new Vector3(0, 0, -7.5f),
-                new Vector3(0, 0, 0.8f), 11, new Vector3(-14.83f, 0, -0.88f),
-                Vector3.zero, Vector3.zero, Vector3.zero));
+            new PositionData(new Vector3(-16f, 0, 0), new Vector3(0, 0, -7.5f),
+                new Vector3(0, 0, 0.8f), 11, Vector3.zero,
+                new Vector3(10.35f, 0, -4.2f), Vector3.zero, Vector3.zero));
     }
 }
