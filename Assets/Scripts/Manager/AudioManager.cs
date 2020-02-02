@@ -19,6 +19,10 @@ public class AudioManager : BaseManager
     /// </summary>
     public const string Sound_ButtonClick = "ButtonClick";
     /// <summary>
+    /// 回忆背景音乐
+    /// </summary>
+    public const string Sound_Recall = "Recall";
+    /// <summary>
     /// 吃苹果音效
     /// </summary>
     public const string Sound_EatApple = "吃苹果";

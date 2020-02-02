@@ -20,11 +20,18 @@ public class RecallManager : BaseManager
         {
             return;
         }
-        else
+        go.SetActive(true);
+        facade.PlayBgSound(AudioManager.Sound_Recall);
+        float time = 0;
+        if (recallIndex == 1)
         {
-            go.SetActive(true);
+            time = 7.5f;
         }
-        DOTween.To(() => timeCount, a => timeCount = a, 1, 7.5f).OnComplete(delegate()
+        else if (recallIndex == 2)
+        {
+            time = 8;
+        }
+        DOTween.To(() => timeCount, a => timeCount = a, 1, time).OnComplete(delegate()
         {
             go.SetActive(false);
             facade.cc.ChangeMovable(true);
@@ -32,6 +39,8 @@ public class RecallManager : BaseManager
             {
                 facade.ShowMessage(hint);
             }
+
+            facade.PlayBgSoundSmoothlySync(AudioManager.Sound_BGM);
         });
         facade.cc.ChangeMovable(false);
     }
