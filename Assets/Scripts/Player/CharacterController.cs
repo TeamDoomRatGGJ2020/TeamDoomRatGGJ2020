@@ -50,7 +50,7 @@ public class CharacterController : MonoBehaviour
     // 检测是否滞空用的球面半径
     const float GroundCheckRadius = .1f;
     // 是否滞空
-    private bool _IsGrounding;
+    private bool _IsGrounding = true;
     #endregion
 
     // 是否面朝右边
@@ -73,13 +73,20 @@ public class CharacterController : MonoBehaviour
     private Animator _EyesAnimator;
     private AudioSource _AudioSource;
 
-    public PlayerShape PlayerShape = PlayerShape.Ball;
+    private PlayerShape _PlayerShape = PlayerShape.Ball;
     // 保证每次检测伸缩脚之前该键已经被抬起来了 避免按住然后连续伸缩
     private bool _SquatingKeyReset = true;
     private bool _IsSquating = false;
     private bool _ChangeToBall = false;
     private bool _ChangeToSquare = false;
-    private bool _Movable = false;
+    private bool _Movable = true;
+
+    public PlayerShape PlayerShape{
+        get{
+            return _PlayerShape;
+        }
+    }
+    public bool IsSquating{get{return _IsSquating;}}
 
     private FloorMaterial _FloorMaterial = FloorMaterial.Grass;
 
@@ -215,23 +222,23 @@ public class CharacterController : MonoBehaviour
     {
         Move(_Move, _Jump);
 
-        bool wasGrounding = _IsGrounding;
-        _IsGrounding = false;
+        // bool wasGrounding = _IsGrounding;
+        // _IsGrounding = false;
 
-        // 检测是否和地面碰撞
-        if (Time.time > _NextGroundCheckTime)
-        {
-            Collider[] colliders = Physics.OverlapSphere(GroundCheck.position, GroundCheckRadius, GroundLayer);
-            foreach (var i in colliders)
-            {
-                if (i.gameObject != gameObject)
-                {
-                    _IsGrounding = true;
-                    if (!wasGrounding)
-                        _OnLandEvent.Invoke();
-                }
-            }
-        }
+        // // 检测是否和地面碰撞
+        // if (Time.time > _NextGroundCheckTime)
+        // {
+        //     Collider[] colliders = Physics.OverlapSphere(GroundCheck.position, GroundCheckRadius, GroundLayer);
+        //     foreach (var i in colliders)
+        //     {
+        //         if (i.gameObject != gameObject)
+        //         {
+        //             _IsGrounding = true;
+        //             if (!wasGrounding)
+        //                 _OnLandEvent.Invoke();
+        //         }
+        //     }
+        // }
     }
 
     public void Move(Vector2 move, bool jump)
@@ -240,7 +247,7 @@ public class CharacterController : MonoBehaviour
             return;
         }
 
-        if (PlayerShape == PlayerShape.Ball)
+        if (_PlayerShape == PlayerShape.Ball)
         {
             if (_IsSquating)
             {
@@ -277,13 +284,54 @@ public class CharacterController : MonoBehaviour
             }
         }
 
-        if (CanJump && _IsGrounding && jump)
-        {
-            _IsGrounding = false;
+        // if (CanJump && _IsGrounding && jump)
+        // {
+        //     _IsGrounding = false;
 
-            _Rigidbody.AddForce(new Vector3(0f, JumpForce, 0f));
-            _NextGroundCheckTime = Time.time + GroudCheckColdTime;
+        //     _Rigidbody.AddForce(new Vector3(0f, JumpForce, 0f));
+        //     _NextGroundCheckTime = Time.time + GroudCheckColdTime;
+        // }
+    }
+
+    public void MandatoryMove(Vector2 move)
+    {
+        if (_PlayerShape == PlayerShape.Ball)
+        {
+            if (_IsSquating)
+            {
+                move *= BallSpeedRatio;
+            }
         }
+        else
+        {
+            if (_IsSquating)
+            {
+                move = Vector2.zero;
+            }
+            else
+            {
+                move *= SquareSpeedRatio;
+            }
+        }
+
+        // 要么在地面 要么能够空中控制才能移动
+        if (_IsGrounding || CanAriControl)
+        {
+            // 处理速度
+            _Rigidbody.velocity = new Vector3(move.x, _Rigidbody.velocity.y, move.y);
+            _FacingRight = transform.localScale.x > 0;
+
+            // 处理左右朝向反面
+            if (move.x > 0 && !_FacingRight)
+            {
+                Flip();
+            }
+            else if (move.x < 0 && _FacingRight)
+            {
+                Flip();
+            }
+        }
+
     }
 
     private void Flip()
@@ -293,18 +341,24 @@ public class CharacterController : MonoBehaviour
         transform.localScale = Vector3.Scale(transform.localScale, new Vector3(-1, 1, 1));
     }
 
+    public void MandatorySquat(){
+        if(!_IsSquating){
+            changeSquating();
+        }
+    }
+
     public void SetPlayerShape(bool changeToBall, bool changeToSquare, bool changeSquat)
     {
         //Debug.Log(_SquatingKeyReset.ToString()+" "+PlayerShape.ToString()+" "+changeToBall.ToString()+" "+changeToSquare.ToString());
 
         changeSquat &= _SquatingKeyReset;
 
-        switch (PlayerShape)
+        switch (_PlayerShape)
         {
             case PlayerShape.Ball:
                 if (changeToBall is false && changeToSquare is true)
                 {
-                    PlayerShape = PlayerShape.Square;
+                    _PlayerShape = PlayerShape.Square;
                     _ChangeToSquare = true;
                     changeSquat = (_IsSquating);
                 }
@@ -312,7 +366,7 @@ public class CharacterController : MonoBehaviour
             case PlayerShape.Square:
                 if (changeToSquare is false && changeToBall is true)
                 {
-                    PlayerShape = PlayerShape.Ball;
+                    _PlayerShape = PlayerShape.Ball;
                     _ChangeToBall = true;
                     changeSquat = (_IsSquating);
                 }
@@ -335,7 +389,7 @@ public class CharacterController : MonoBehaviour
         {
             _SphereCollider.radius = SquatingColliderRadius;
 
-            if (PlayerShape is PlayerShape.Square)
+            if (_PlayerShape is PlayerShape.Square)
             {
                 knockEvent();
             }
@@ -348,7 +402,7 @@ public class CharacterController : MonoBehaviour
 
     private void knockEvent()
     {
-        if (PlayerShape is PlayerShape.Square)
+        if (_PlayerShape is PlayerShape.Square)
         {
             GameFacade.Instance.PlayNormalSound(AudioManager.Sound_Smash, _AudioSource);
         }
