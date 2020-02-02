@@ -275,10 +275,7 @@ public class PlayerTrigger : MonoBehaviour
                 {
                     facade.GetPresentGO().transform.Find("Anim").gameObject.SetActive(true);
                     facade.PlayBgSound(AudioManager.Sound_Recall);
-                    transform.Find("PlayerSprite").gameObject.SetActive(false);
-                    facade.ChangeMovable(false);
-                    GetComponent<SphereCollider>().enabled = false;
-                    GetComponent<Animator>().SetTrigger("End");
+                    //TODO
                 }
 =======
                 //TODO
