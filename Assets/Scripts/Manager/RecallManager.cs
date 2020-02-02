@@ -11,6 +11,10 @@ public class RecallManager : BaseManager
 
     public void OnRecall(int recallIndex,string hint = null)
     {
+        if (facade.GetPresentGO().transform.Find("Recall_" + recallIndex) == null) 
+        {
+            return;
+        }
         GameObject go = facade.GetPresentGO().transform.Find("Recall_" + recallIndex).gameObject;
         if (go == null)
         {

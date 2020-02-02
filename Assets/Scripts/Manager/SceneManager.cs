@@ -51,6 +51,14 @@ public class SceneManager : BaseManager
         }
         GameObject.Destroy(bgGO);
         bgGO = GameObject.Instantiate(sceneGO);
+        if (index == 4)
+        {
+            SpriteRenderer sr = bgGO.transform.Find("Plank").GetComponent<SpriteRenderer>();
+            if (facade.GetMissionIndex() >= 2) 
+            {
+                sr.sprite = Resources.Load<Sprite>("Elements/木板");
+            }
+        }
         this.index = index;
     }
 

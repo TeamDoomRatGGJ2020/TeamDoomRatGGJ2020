@@ -11,6 +11,8 @@ public class HeadManager : BaseManager
     private Sprite plankSprite = null;
     private Sprite appleSprite = null;
 
+    private bool hasThing = false;
+
     public override void OnInit()
     {
         base.OnInit();
@@ -23,15 +25,23 @@ public class HeadManager : BaseManager
     public void PickUpPlank()
     {
         sr.sprite = plankSprite;
+        hasThing = true;
     }
 
     public void Throw()
     {
         sr.sprite = null;
+        hasThing = false;
     }
 
     public void PickUpApple()
     {
         sr.sprite = appleSprite;
+        hasThing = true;
+    }
+
+    public bool HasThing()
+    {
+        return hasThing;
     }
 }

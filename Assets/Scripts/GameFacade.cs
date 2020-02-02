@@ -72,6 +72,8 @@ public class GameFacade : MonoBehaviour
         talkManager = new TalkManager(this);
         headManager = new HeadManager(this);
 
+        cc.ChangeMovable(true);
+
         audioManager.OnInit();
         uiManager.OnInit();
         sceneManager.OnInit();
@@ -267,6 +269,10 @@ public class GameFacade : MonoBehaviour
         cc.ChangeMovable(canMove);
     }
 
+    public int GetMissionIndex()
+    {
+        return cc.gameObject.GetComponent<PlayerTrigger>().GetMissionIndex();
+    }
     #endregion
 
     #region Head内容
@@ -284,6 +290,11 @@ public class GameFacade : MonoBehaviour
     public void Throw()
     {
         headManager.Throw();
+    }
+
+    public bool HasThing()
+    {
+        return headManager.HasThing();
     }
     #endregion
 }
