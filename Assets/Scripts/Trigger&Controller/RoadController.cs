@@ -5,6 +5,7 @@ using UnityEngine;
 
 public enum CrossRoadStateEnum
 {
+    Nothing,
     Refuse,
     WaitForChangeShape,
     WaitNoCar,
@@ -20,7 +21,7 @@ public class RoadController : MonoBehaviour
     public float WaitRefuseTime = 1.5f;
     public float WaitCrossRoadTime = 3f;
     private float _TimeToWait = -1f;
-    private CrossRoadStateEnum _State;
+    private CrossRoadStateEnum _State = CrossRoadStateEnum.Nothing;
     private CharacterController _CharacterController;
 
     public GameObject CrossRoadBound;
@@ -40,10 +41,12 @@ public class RoadController : MonoBehaviour
 
     private bool Used = false;
 
+    public List<Car> cars = new List<Car>();
 
     private void OnEnable()
     {
         FirstCarPast = false;
+        _State = CrossRoadStateEnum.Nothing;
     }
 
     // Start is called before the first frame update
@@ -86,8 +89,9 @@ public class RoadController : MonoBehaviour
 
             if (_State is CrossRoadStateEnum.Crossing)
             {
-                Debug.Log("Mandatory  "+_TimeToWait.ToString());
                 _CharacterController.MandatoryMove(new Vector2(3, 0));
+            }else if(_State is CrossRoadStateEnum.Refuse){
+                _CharacterController.MandatoryMove(new Vector2(-1.5f,0));
             }
 
         }
@@ -121,7 +125,7 @@ public class RoadController : MonoBehaviour
 
     private void _Refuse()
     {
-
+        _CharacterController.ShakeHead();
         _CharacterController.ChangeMovable(false);
         _State = CrossRoadStateEnum.Refuse;
         _TimeToWait = WaitRefuseTime;
@@ -163,6 +167,7 @@ public class RoadController : MonoBehaviour
         {
             case CrossRoadStateEnum.Refuse:
                 _CharacterController.ChangeMovable(true);
+                _State = CrossRoadStateEnum.Nothing;
                 break;
             case CrossRoadStateEnum.WaitForChangeShape:
                 _StartPlaying();
@@ -193,5 +198,16 @@ public class RoadController : MonoBehaviour
         car.PitchRange = CarPitchRange;
         car.IsFirstCar = !FirstCarPast;
         FirstCarPast = true;
+        car.Controller = gameObject;
+
+        cars.Add(car);
+    }
+
+    private void OnDisable() {
+        foreach(var car in cars){
+            if(car.gameObject != null){
+                car.Finish();
+            }
+        }
     }
 }

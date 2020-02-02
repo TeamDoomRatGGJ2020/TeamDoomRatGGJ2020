@@ -12,6 +12,7 @@ public class Car : MonoBehaviour
     private float _PastTime = 0f;
     public float PitchRange;
     public string CarSpriteUrlBase = "Elements/Car";
+    public GameObject Controller;
 
     private SpriteRenderer _SpriteRenderer;
 
@@ -69,6 +70,16 @@ public class Car : MonoBehaviour
             Destroy(gameObject);
             return;
         }
+
+        if(Controller.active is false){
+            Finish();
+        }
+    }
+
+    public void Finish(){
+        _SpriteRenderer.sprite = null;
+        gameObject.SetActive(false);
+        Destroy(gameObject);
     }
 
 
