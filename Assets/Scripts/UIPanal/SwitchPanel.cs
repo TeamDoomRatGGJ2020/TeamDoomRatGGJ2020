@@ -31,12 +31,14 @@ public class SwitchPanel : BasePanel
     {
         gameObject.SetActive(true);
         transform.SetAsFirstSibling();
+        facade.ChangeMovable(false);
         Color tempColor = image.color;
         tempColor.a = 0;
         image.color = tempColor;
         image.DOFade(1, 0.6f).OnComplete(() => image.DOFade(0, 0.6f).SetDelay(0.5f)
             .OnComplete(delegate()
             {
+                facade.ChangeMovable(true);
                 gameObject.SetActive(false);
                 uiManager.PopPanel();
             }));

@@ -302,19 +302,26 @@ public class PlayerTrigger : MonoBehaviour
                     // GetComponent<Animator>().enabled = false;
                     // facade.ChangeMovable(false);
                     facade.Throw();
-                    
-                    DOTween.To(() => timeCount, a => timeCount = a, 1, 6).OnComplete(delegate ()
-                    {
-                        var cc1 = GameFacade.Instance.cc;
-                        //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
-                        cc1.SetFocusOffset(16);
-                    });
 
-                    DOTween.To(() => timeCount, a => timeCount = a, 1, 10).OnComplete(delegate ()
+                    DOTween.To(() => timeCount, a => timeCount = a, 1, 3).OnComplete(delegate ()
                     {
                         var cc1 = GameFacade.Instance.cc;
                         //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
                         cc1.SetFocusOffset(32);
+                    });
+
+                    //DOTween.To(() => timeCount, a => timeCount = a, 1, 6).OnComplete(delegate ()
+                    //{
+                    //    var cc1 = GameFacade.Instance.cc;
+                    //    //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
+                    //    cc1.SetFocusOffset(16);
+                    //});
+
+                    DOTween.To(() => timeCount, a => timeCount = a, 1, 5).OnComplete(delegate ()
+                    {
+                        var cc1 = GameFacade.Instance.cc;
+                        //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
+                        cc1.SetFocusOffset(32.5f);
                     });
 
                     // 
@@ -325,7 +332,7 @@ public class PlayerTrigger : MonoBehaviour
                     });
 
                     // Quit Game at 16s
-                    DOTween.To(() => timeCount, c => timeCount = c, 1, 16).OnComplete(delegate ()
+                    DOTween.To(() => timeCount, c => timeCount = c, 1, 17).OnComplete(delegate ()
                     {
                         Application.Quit();
                     });

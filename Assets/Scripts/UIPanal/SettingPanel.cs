@@ -35,6 +35,7 @@ public class SettingPanel : BasePanel
     private void OnCloseClick()
     {
         ExitAnim();
+        Cursor.visible = false;
     }
 
     private void OnQuitClick()
@@ -44,6 +45,7 @@ public class SettingPanel : BasePanel
 
     private void EnterAnim()
     {
+        Cursor.visible = true;
         gameObject.SetActive(true);
     }
 

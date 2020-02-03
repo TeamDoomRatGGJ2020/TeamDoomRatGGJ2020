@@ -44,6 +44,8 @@ public class StartPanel : BasePanel
         startButton.transform.DOScale(0, 0.5f);
         quitButton.transform.DOScale(0, 0.5f);
 
+        Cursor.visible = false;
+
         StartQuarrel();
     }
 
