@@ -28,6 +28,7 @@ public class MessagePanel : BasePanel
 
     public void ShowMessage(string msg)
     {
+        transform.SetAsLastSibling();
         text.text = msg;
         if (!text.enabled)
         {

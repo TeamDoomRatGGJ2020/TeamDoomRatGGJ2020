@@ -26,6 +26,7 @@ public class UIManager : BaseManager
     private Dictionary<UIPanelType, BasePanel> panelDict;//保存所有实例化面板的游戏物体身上的BasePanel组件
     private Stack<BasePanel> panelStack;
     private MessagePanel msgPanal;
+    private SwitchPanel switchPanel;
     private UIPanelType PanelTypeToPush = UIPanelType.None;
 
     public override void OnInit()
@@ -145,6 +146,11 @@ public class UIManager : BaseManager
         this.msgPanal = msgPanel;
     }
 
+    public void InjectSwitchPanel(SwitchPanel switchPanel)
+    {
+        this.switchPanel = switchPanel;
+    }
+
     public void ShowMessage(string msg)
     {
         if (msgPanal==null)
@@ -159,5 +165,10 @@ public class UIManager : BaseManager
     public void ShowSwitch()
     {
         PushPanel(UIPanelType.Switch);
+    }
+
+    public void ShowEnd()
+    {
+        switchPanel.BlackEnd();
     }
 }
