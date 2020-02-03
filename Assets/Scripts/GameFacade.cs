@@ -190,6 +190,12 @@ public class GameFacade : MonoBehaviour
     {
         uiManager.ShowSwitch();
     }
+
+    public void ShowEnd()
+    {
+        uiManager.ShowMessage("感谢游玩");
+        uiManager.ShowEnd();
+    }
     #endregion
 
     #region Scene内容

@@ -9,9 +9,10 @@ public class SwitchPanel : BasePanel
     private Image image;
     public override void OnEnter()
     {
+        base.OnEnter();
         image = GetComponent<Image>();
         ShowAnim();
-        base.OnEnter();
+        uiManager.InjectSwitchPanel(this);
     }
 
     public override void OnResume()
@@ -26,9 +27,10 @@ public class SwitchPanel : BasePanel
         base.OnPause();
     }
 
-    public void ShowAnim()
+    private void ShowAnim()
     {
         gameObject.SetActive(true);
+        transform.SetAsFirstSibling();
         Color tempColor = image.color;
         tempColor.a = 0;
         image.color = tempColor;
@@ -38,5 +40,14 @@ public class SwitchPanel : BasePanel
                 gameObject.SetActive(false);
                 uiManager.PopPanel();
             }));
+    }
+
+    public void BlackEnd()
+    {
+        gameObject.SetActive(true);
+        Color tempColor = image.color;
+        tempColor.a = 0;
+        image.color = tempColor;
+        image.DOFade(1, 0.6f);
     }
 }
