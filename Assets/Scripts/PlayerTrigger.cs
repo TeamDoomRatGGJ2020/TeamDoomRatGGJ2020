@@ -294,28 +294,32 @@ public class PlayerTrigger : MonoBehaviour
                     cc.ChangeMovable(false);
                     cc.Vanish();
 
-                    //将玩家从屏幕中消失
-                    cc.transform.Find("Eyes").GetComponent<SpriteRenderer>().sprite = null;
-                    cc.transform.Find("Eyes").GetComponent<Animator>().enabled = false;
-                    //TODO Shadow的sprite设置
-                    GetComponent<SpriteRenderer>().sprite = null;
-                    GetComponent<Animator>().enabled = false;
-                    facade.ChangeMovable(false);
+                    // //将玩家从屏幕中消失
+                    // cc.transform.Find("Eyes").GetComponent<SpriteRenderer>().sprite = null;
+                    // cc.transform.Find("Eyes").GetComponent<Animator>().enabled = false;
+                    // //TODO Shadow的sprite设置
+                    // GetComponent<SpriteRenderer>().sprite = null;
+                    // GetComponent<Animator>().enabled = false;
+                    // facade.ChangeMovable(false);
                     facade.Throw();
                     
-                    // Set focus offset = 14 at 6s
                     DOTween.To(() => timeCount, a => timeCount = a, 1, 6).OnComplete(delegate ()
                     {
-                        Debug.Log("timer 1");
                         var cc1 = GameFacade.Instance.cc;
                         //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
-                        cc1.SetFocusOffset(20);
+                        cc1.SetFocusOffset(16);
+                    });
+
+                    DOTween.To(() => timeCount, a => timeCount = a, 1, 10).OnComplete(delegate ()
+                    {
+                        var cc1 = GameFacade.Instance.cc;
+                        //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
+                        cc1.SetFocusOffset(32);
                     });
 
                     // 
                     DOTween.To(() => timeCount, b => timeCount = b, 1, 14).OnComplete(delegate ()
                     {
-                        Debug.Log("timer 2");
                         facade.StopBgSoundSmoothlySync();
                         facade.ShowEnd();
                     });
@@ -323,7 +327,6 @@ public class PlayerTrigger : MonoBehaviour
                     // Quit Game at 16s
                     DOTween.To(() => timeCount, c => timeCount = c, 1, 16).OnComplete(delegate ()
                     {
-                        Debug.Log("timer 3");
                         Application.Quit();
                     });
                 }
