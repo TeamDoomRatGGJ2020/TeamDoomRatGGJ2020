@@ -87,6 +87,7 @@ public class CharacterController : MonoBehaviour
     public Transform CameraFocus;
     public float CameraFocusOffset = 0;
 
+    public GameObject ShadowSprite;
     
     public void SetFocusOffset(float offset){
         CameraFocusOffset = offset;
@@ -447,6 +448,15 @@ public class CharacterController : MonoBehaviour
     }
 
     public void Vanish(){
+        ShadowSprite.GetComponent<SpriteRenderer>().enabled = false;
+
         _Animator.SetTrigger("Vanish");
+        SpriteRenderer renderer = GetComponent<SpriteRenderer>();
+        
+        renderer.enabled = false;
+        _Animator.enabled = false;
+
+        _EyesAnimator.enabled = false;
+        GameObject.Find("Eyes").GetComponent<SpriteRenderer>().enabled = false;
     }
 }

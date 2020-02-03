@@ -299,20 +299,23 @@ public class PlayerTrigger : MonoBehaviour
                     // Set focus offset = 14 at 6s
                     DOTween.To(() => timeCount, a => timeCount = a, 1, 6).OnComplete(delegate ()
                     {
+                        Debug.Log("timer 1");
                         var cc1 = GameFacade.Instance.cc;
                         //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
-                        cc1.SetFocusOffset(14);
+                        cc1.SetFocusOffset(20);
                     });
 
                     // 
                     DOTween.To(() => timeCount, b => timeCount = b, 1, 14).OnComplete(delegate ()
                     {
+                        Debug.Log("timer 2");
                         facade.StopBgSoundSmoothlySync();
                     });
 
                     // Quit Game at 15s
                     DOTween.To(() => timeCount, c => timeCount = c, 1, 15).OnComplete(delegate ()
                     {
+                        Debug.Log("timer 3");
                         Application.Quit();
                     });
                 }

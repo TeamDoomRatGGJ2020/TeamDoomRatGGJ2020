@@ -275,6 +275,11 @@ PrefabInstance:
       propertyPath: CameraFocus
       value: 
       objectReference: {fileID: 869640196}
+    - target: {fileID: 2319826920671237240, guid: d996df0229c15c644bf05b81846ce547,
+        type: 3}
+      propertyPath: ShadowSprite
+      value: 
+      objectReference: {fileID: 87275782}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d996df0229c15c644bf05b81846ce547, type: 3}
 --- !u!1 &87275782
@@ -1062,6 +1067,7 @@ MonoBehaviour:
   HaveLearnedSquat: 0
   CameraFocus: {fileID: 0}
   CameraFocusOffset: 0
+  ShadowSprite: {fileID: 0}
 --- !u!95 &799451425
 Animator:
   serializedVersion: 3
