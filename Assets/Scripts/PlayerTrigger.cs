@@ -246,7 +246,7 @@ public class PlayerTrigger : MonoBehaviour
                 {
                     GameObject go = facade.GetPresentGO();
 
-                    var bound = go.GetComponent<RepairBridgeController>();
+                    var bound = go.GetComponent<FillGapController>();
                     bound.Boom();
 
                     SpriteRenderer plank = go.transform.Find("Plank").GetComponent<SpriteRenderer>();
@@ -284,19 +284,36 @@ public class PlayerTrigger : MonoBehaviour
                     facade.GetPresentGO().transform.Find("Anim").gameObject.SetActive(true);
                     facade.PlayBgSound(AudioManager.Sound_Recall);
 
+                    GameObject go = facade.GetPresentGO();
+
+                    var bound = go.GetComponent<RepairBridgeController>();
+                    bound.Repaired();
+
                     var cc = GameFacade.Instance.cc;
                     //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
                     cc.SetFocusOffset(9);
+                    cc.ChangeMovable(false);
+                    cc.Vanish();
 
-                    DOTween.To(() => timeCount, a => timeCount = a, 1, 14).OnComplete(delegate ()
+
+                    // Set focus offset = 14 at 6s
+                    DOTween.To(() => timeCount, a => timeCount = a, 1, 6).OnComplete(delegate ()
                     {
-                        Application.Quit();
-
-                        facade.PlayBgSoundSmoothlySync(AudioManager.Sound_BGM);
-
                         var cc1 = GameFacade.Instance.cc;
                         //GameObject.Find("CM vcam1").GetComponent<Cinemachine.CinemachineVirtualCamera>().;
-                        cc1.ResetFocus();
+                        cc1.SetFocusOffset(14);
+                    });
+
+                    // 
+                    DOTween.To(() => timeCount, b => timeCount = b, 1, 14).OnComplete(delegate ()
+                    {
+                        facade.StopBgSoundSmoothlySync();
+                    });
+
+                    // Quit Game at 15s
+                    DOTween.To(() => timeCount, c => timeCount = c, 1, 15).OnComplete(delegate ()
+                    {
+                        Application.Quit();
                     });
                 }
                 break;

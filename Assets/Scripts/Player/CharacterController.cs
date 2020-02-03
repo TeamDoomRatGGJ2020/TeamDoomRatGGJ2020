@@ -445,4 +445,8 @@ public class CharacterController : MonoBehaviour
     public void ChangeMovable(bool movable){
         _Movable = movable;
     }
+
+    public void Vanish(){
+        _Animator.SetTrigger("Vanish");
+    }
 }
